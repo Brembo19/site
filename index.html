@@ -10,31 +10,34 @@
 <body>
     <main class="container">
         <h1>Secure Password Generator</h1>
+        
         <section class="password-display">
             <output class="password-text" id="passwordDisplay">Click Generate</output>
             <button class="copy-btn" onclick="copyPassword()">Copy</button>
         </section>
+
         <form class="settings" id="passwordSettings">
             <div class="length-control">
                 <label for="lengthSlider">Password Length: <span id="lengthValue">12</span></label>
-                <input type="range" min="8" max="24" value="12" id="lengthSlider">
+                <input type="range" id="lengthSlider" min="8" max="32" value="12" onchange="updateLengthValue()">
             </div>
-        </form>
-        <!-- Discord Button -->
-        <button class="discord-btn" onclick="redirectToDiscord()">Add to Discord</button>
-    </main>
-    
-    <script>
-        function redirectToDiscord() {
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=YOUR_BOT_CLIENT_ID&scope=bot&permissions=YOUR_BOT_PERMISSIONS";
-        }
+            <div class="options">
+                <label for="includeSymbols">Include Symbols:</label>
+                <input type="checkbox" id="includeSymbols" checked>
 
-        function copyPassword() {
-            const passwordText = document.getElementById('passwordDisplay').textContent;
-            navigator.clipboard.writeText(passwordText).then(() => {
-                alert("Password copied to clipboard!");
-            });
-        }
-    </script>
+                <label for="includeNumbers">Include Numbers:</label>
+                <input type="checkbox" id="includeNumbers" checked>
+
+                <label for="includeUppercase">Include Uppercase Letters:</label>
+                <input type="checkbox" id="includeUppercase" checked>
+
+                <label for="includeLowercase">Include Lowercase Letters:</label>
+                <input type="checkbox" id="includeLowercase" checked>
+            </div>
+            <button type="button" onclick="generatePassword()">Generate Password</button>
+        </form>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
