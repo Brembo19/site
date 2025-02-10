@@ -10,8 +10,8 @@
 body {
     background-color: #121212;
     color: #fff;
-    padding: 20px;
     font-size: 16px;
+    padding: 20px;
 }
 
 /* Main container */
@@ -98,13 +98,6 @@ footer {
     margin-top: 20px;
     font-size: 14px;
     color: #bbb;
-}
-
-/* History list styling */
-#password-history-list, #webhook-history-list {
-    max-height: 200px;
-    overflow-y: auto;
-    margin-top: 15px;
 }
 
 /* IP Info */
