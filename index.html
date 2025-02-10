@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Generator & Webhook Tool</title>
+    <title>Password Generator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -37,38 +37,10 @@
             <div class="input-group">
                 <input type="text" id="generated-password" readonly>
             </div>
-            <button onclick="generatePassword()">Generate Password</button>
-            <button onclick="copyPassword()">Copy Password</button>
-        </div>
-
-        <!-- Webhook Tool Section -->
-        <div class="card">
-            <h2>Webhook Tool</h2>
-            <div class="input-group">
-                <label for="webhook-url">Webhook URL:</label>
-                <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
+            <div class="button-group">
+                <button onclick="generatePassword()">Generate Password</button>
+                <button onclick="copyPassword()">Copy Password</button>
             </div>
-            <div class="input-group">
-                <label for="webhook-name">Webhook Name:</label>
-                <input type="text" id="webhook-name" placeholder="Webhook Bot">
-            </div>
-            <div class="input-group">
-                <label for="webhook-message">Message:</label>
-                <textarea id="webhook-message" rows="4"></textarea>
-            </div>
-            <button onclick="sendWebhook()">Send Webhook</button>
-            <button onclick="clearWebhookHistory()">Clear History</button>
-        </div>
-
-        <!-- IP Tool Section -->
-        <div class="card">
-            <h2>IP Tool</h2>
-            <div class="input-group">
-                <label for="ip-address">IP Address:</label>
-                <input type="text" id="ip-address" placeholder="Enter IP address">
-            </div>
-            <button onclick="getIPInfo()">Get IP Info</button>
-            <div id="ip-info"></div>
         </div>
 
         <!-- Footer Section -->
