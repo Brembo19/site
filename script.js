@@ -94,11 +94,10 @@ async function getIPInfo() {
             alert('Error fetching IP information.');
         } else {
             const ipInfo = `
-                <strong>IP Information:</strong><br>
-                <strong>IP:</strong> ${data.ip}<br>
-                <strong>Location:</strong> ${data.city}, ${data.region}, ${data.country}<br>
-                <strong>Organization:</strong> ${data.org}<br>
-                <strong>Hostname:</strong> ${data.hostname}
+                <p><strong>IP:</strong> ${data.ip}</p>
+                <p><strong>Location:</strong> ${data.city}, ${data.region}, ${data.country}</p>
+                <p><strong>Organization:</strong> ${data.org}</p>
+                <p><strong>Hostname:</strong> ${data.hostname}</p>
             `;
             document.getElementById('ip-info').innerHTML = ipInfo;
         }
