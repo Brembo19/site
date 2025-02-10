@@ -1,6 +1,6 @@
 // Password Generator Logic
 function generatePassword() {
-    const length = parseInt(document.getElementById('length').value);
+    const length = document.getElementById('length').value;
     const hasUpper = document.getElementById('uppercase').checked;
     const hasLower = document.getElementById('lowercase').checked;
     const hasNumbers = document.getElementById('numbers').checked;
@@ -34,23 +34,22 @@ function copyPassword() {
     const passwordField = document.getElementById('generated-password');
     passwordField.select();
     document.execCommand('copy');
-    alert('Password copied!');
+    alert('Password copied to clipboard!');
 }
 
-// Update the length value displayed based on slider input
 function updateLengthValue() {
-    const length = document.getElementById('length').value;
-    document.getElementById('lengthValue').textContent = length;
+    const lengthValue = document.getElementById('length').value;
+    document.getElementById('lengthValue').textContent = lengthValue;
 }
 
 // Webhook Tool Logic
 async function sendWebhook() {
     const url = document.getElementById('webhook-url').value;
-    const name = document.getElementById('webhook-name').value || 'Webhook Bot';
+    const name = document.getElementById('webhook-name').value || "Webhook Bot";
     const message = document.getElementById('webhook-message').value;
 
     if (!url || !message) {
-        alert('Please fill in the URL and message!');
+        alert('Please fill out the URL and message!');
         return;
     }
 
@@ -67,20 +66,20 @@ async function sendWebhook() {
         });
 
         if (response.ok) {
-            alert('Message sent!');
-            document.getElementById('webhook-message').value = '';
+            alert('Webhook message sent!');
         } else {
-            alert('Failed to send message!');
+            alert('Error sending message.');
         }
     } catch (error) {
         alert('Error: ' + error.message);
     }
 }
 
-// IP Info Tool Logic
-async function getIpInfo() {
+// IP Tool Logic
+async function getIPInfo() {
     const ipAddress = document.getElementById('ip-address').value;
-    const ipInfoField = document.getElementById('ip-info');
+    const token = "889d25ffe7b504";
+    const url = `https://ipinfo.io/${ipAddress}?token=${token}`;
 
     if (!ipAddress) {
         alert('Please enter an IP address!');
@@ -88,13 +87,20 @@ async function getIpInfo() {
     }
 
     try {
-        const response = await fetch(`https://ipinfo.io/${ipAddress}/json?token=889d25ffe7b504`);
+        const response = await fetch(url);
         const data = await response.json();
 
-        if (response.ok) {
-            ipInfoField.value = JSON.stringify(data, null, 2);
+        if (data.error) {
+            alert('Error fetching IP information.');
         } else {
-            alert('Error retrieving IP info!');
+            const ipInfo = `
+                <strong>IP Information:</strong><br>
+                <strong>IP:</strong> ${data.ip}<br>
+                <strong>Location:</strong> ${data.city}, ${data.region}, ${data.country}<br>
+                <strong>Organization:</strong> ${data.org}<br>
+                <strong>Hostname:</strong> ${data.hostname}
+            `;
+            document.getElementById('ip-info').innerHTML = ipInfo;
         }
     } catch (error) {
         alert('Error: ' + error.message);
