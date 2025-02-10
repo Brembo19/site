@@ -1,6 +1,6 @@
 // Password Generator Logic
 function generatePassword() {
-    const length = document.getElementById('length').value;
+    const length = parseInt(document.getElementById('length').value);
     const hasUpper = document.getElementById('uppercase').checked;
     const hasLower = document.getElementById('lowercase').checked;
     const hasNumbers = document.getElementById('numbers').checked;
@@ -19,6 +19,11 @@ function generatePassword() {
 
     if (!chars) {
         alert('Please select at least one character type!');
+        return;
+    }
+
+    if (isNaN(length) || length <= 0) {
+        alert('Please enter a valid password length!');
         return;
     }
 
@@ -53,6 +58,14 @@ async function sendWebhook() {
         return;
     }
 
+    // Validate URL format
+    try {
+        new URL(url);
+    } catch (error) {
+        alert('Please enter a valid URL!');
+        return;
+    }
+
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -68,7 +81,7 @@ async function sendWebhook() {
         if (response.ok) {
             alert('Message sent successfully!');
         } else {
-            alert('Error while sending message');
+            alert(`Error while sending message: ${response.statusText}`);
         }
     } catch (error) {
         alert('Error while sending message: ' + error.message);
