@@ -3,22 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Webhook Tool</title>
+    <title>Webhook Sender & Manager</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="ass.css">
 </head>
 <body>
     <main class="container">
-        <h1>Discord Webhook Tool</h1>
-        <form id="webhookForm">
-            <label>Webhook URL: <input type="text" id="webhookUrl" required></label>
-            <label>Webhook Name: <input type="text" id="webhookName"></label>
-            <label>Avatar URL: <input type="text" id="avatarUrl"></label>
-            <label>Message: <textarea id="message" rows="4"></textarea></label>
-            <button type="button" onclick="sendWebhook()">Send Message</button>
-        </form>
-        <a href="index.html" class="back-btn">Back to Generator</a>
+        <h1>Webhook Sender & Manager</h1>
+
+        <div class="webhook-controls">
+            <label for="webhookUrl">Webhook URL:</label>
+            <input type="text" id="webhookUrl" placeholder="Enter webhook URL">
+            
+            <label for="webhookName">Webhook Name:</label>
+            <input type="text" id="webhookName" placeholder="Enter webhook name">
+
+            <label for="avatarUrl">Avatar URL (optional):</label>
+            <input type="text" id="avatarUrl" placeholder="Enter avatar URL">
+            
+            <label for="message">Message:</label>
+            <textarea id="message" placeholder="Enter message content"></textarea>
+
+            <label for="messageCount">Number of Messages to Send:</label>
+            <input type="number" id="messageCount" min="1" value="1">
+
+            <button onclick="sendWebhook()">Send Webhook</button>
+            <button onclick="testWebhook()">Test Webhook</button>
+            <button onclick="deleteWebhook()">Delete Webhook</button>
+        </div>
     </main>
-    <script src="webhook.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>
