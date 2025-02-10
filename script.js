@@ -28,7 +28,6 @@ function generatePassword() {
     }
 
     document.getElementById('generated-password').value = password;
-    addToPasswordHistory(password);
 }
 
 function copyPassword() {
@@ -36,17 +35,6 @@ function copyPassword() {
     passwordField.select();
     document.execCommand('copy');
     alert('Password copied!');
-}
-
-function addToPasswordHistory(password) {
-    const historyList = document.getElementById('password-history-list');
-    const historyItem = document.createElement('div');
-    historyItem.className = 'history-item';
-    historyItem.innerHTML = `
-        <span>${password}</span>
-        <button onclick="this.parentElement.remove()">Delete</button>
-    `;
-    historyList.insertBefore(historyItem, historyList.firstChild);
 }
 
 // Webhook Tool Logic
@@ -73,30 +61,36 @@ async function sendWebhook() {
         });
 
         if (response.ok) {
-            addToWebhookHistory(message);
-            document.getElementById('webhook-message').value = '';
             alert('Message sent!');
+            document.getElementById('webhook-message').value = '';
         } else {
-            throw new Error('Failed to send message');
+            alert('Failed to send message!');
         }
     } catch (error) {
-        console.error(error); // Log the error to the console for debugging
         alert('Error: ' + error.message);
     }
 }
 
-function addToWebhookHistory(message) {
-    const historyList = document.getElementById('webhook-history-list');
-    const historyItem = document.createElement('div');
-    historyItem.className = 'history-item';
-    historyItem.innerHTML = `
-        <span>${message}</span>
-        <button onclick="this.parentElement.remove()">Delete</button>
-    `;
-    historyList.insertBefore(historyItem, historyList.firstChild);
-}
+// IP Info Tool Logic
+async function getIpInfo() {
+    const ipAddress = document.getElementById('ip-address').value;
+    const ipInfoField = document.getElementById('ip-info');
 
-function clearWebhookHistory() {
-    const historyList = document.getElementById('webhook-history-list');
-    historyList.innerHTML = ''; // Clear the entire history
+    if (!ipAddress) {
+        alert('Please enter an IP address!');
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://ipinfo.io/${ipAddress}/json?token=889d25ffe7b504`);
+        const data = await response.json();
+
+        if (response.ok) {
+            ipInfoField.value = JSON.stringify(data, null, 2);
+        } else {
+            alert('Error retrieving IP info!');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
 }
