@@ -3,124 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Password Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <title>Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="background-overlay"></div>
-    <main class="container" aria-labelledby="page-title">
-        <div class="security-indicator">
-            <span class="strength-text">Password Strength: </span>
-            <div class="strength-meter">
-                <div class="strength-bar" id="strengthBar"></div>
+    <div class="container">
+        <h1>Password Generator</h1>
+        <div class="password-display">
+            <span id="passwordDisplay">Click Generate</span>
+            <button onclick="copyPassword()">Copy</button>
+        </div>
+        <div class="settings">
+            <div class="length-control">
+                <label for="lengthSlider">Password Length: <span id="lengthValue">12</span></label>
+                <input type="range" min="8" max="32" value="12" id="lengthSlider">
+            </div>
+            <div class="character-types">
+                <label>
+                    <input type="checkbox" id="uppercaseCheck" checked> 
+                    Uppercase (A-Z)
+                </label>
+                <label>
+                    <input type="checkbox" id="lowercaseCheck" checked> 
+                    Lowercase (a-z)
+                </label>
+                <label>
+                    <input type="checkbox" id="numbersCheck" checked> 
+                    Numbers (0-9)
+                </label>
+                <label>
+                    <input type="checkbox" id="symbolsCheck" checked> 
+                    Symbols (!@#$%^&*)
+                </label>
             </div>
         </div>
-
-        <h1 id="page-title">Secure Password Generator</h1>
-        
-        <section class="password-display" aria-live="polite">
-            <output 
-                class="password-text" 
-                id="passwordDisplay" 
-                aria-label="Generated Password" 
-                data-tooltip="Click to copy"
-            >Click Generate</output>
-            <button 
-                class="copy-btn" 
-                onclick="copyPassword()" 
-                aria-label="Copy Password"
-                title="Copy generated password"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                Copy
-            </button>
-        </section>
-
-        <form class="settings" id="passwordSettings">
-            <div class="length-control">
-                <div class="length-header">
-                    <label for="lengthSlider">Password Length</label>
-                    <span id="lengthValue" class="length-value">12</span>
-                </div>
-                <input 
-                    type="range" 
-                    min="8" 
-                    max="32" 
-                    value="12" 
-                    id="lengthSlider" 
-                    aria-describedby="length-description"
-                >
-                <small id="length-description" class="hint">Slide to adjust (8-32 characters)</small>
-            </div>
-
-            <fieldset class="character-types">
-                <legend>Include Characters:</legend>
-                <div class="checkbox-group">
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            id="uppercaseCheck" 
-                            name="characterTypes" 
-                            checked 
-                            aria-describedby="uppercase-desc"
-                        >
-                        <span class="checkbox-label">Uppercase (A-Z)</span>
-                        <span id="uppercase-desc" class="sr-only">Include uppercase letters in password</span>
-                    </label>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            id="lowercaseCheck" 
-                            name="characterTypes" 
-                            checked
-                            aria-describedby="lowercase-desc"
-                        >
-                        <span class="checkbox-label">Lowercase (a-z)</span>
-                        <span id="lowercase-desc" class="sr-only">Include lowercase letters in password</span>
-                    </label>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            id="numbersCheck" 
-                            name="characterTypes" 
-                            checked
-                            aria-describedby="numbers-desc"
-                        >
-                        <span class="checkbox-label">Numbers (0-9)</span>
-                        <span id="numbers-desc" class="sr-only">Include numbers in password</span>
-                    </label>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            id="symbolsCheck" 
-                            name="characterTypes" 
-                            checked
-                            aria-describedby="symbols-desc"
-                        >
-                        <span class="checkbox-label">Symbols (!@#$%^&*)</span>
-                        <span id="symbols-desc" class="sr-only">Include special symbols in password</span>
-                    </label>
-                </div>
-            </fieldset>
-        </form>
-
-        <button 
-            class="generate-btn" 
-            onclick="generatePassword()" 
-            aria-controls="passwordDisplay"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.6-4.4-3.9C13.1 7 11 9 11 11.6V16"/>
-                <path d="M16 10V5a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v9a8 8 0 0 1-8 8H5c-2.8 0-4-2-4-4v-8c0-2 1-4 4-4h7"/>
-                <line x1="3" y1="22" x2="22" y2="3"/>
-            </svg>
+        <button onclick="generatePassword()" class="generate-btn">
             Generate Password
         </button>
-    </main>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
