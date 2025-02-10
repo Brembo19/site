@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator & Webhook Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Password Generator Section -->
+        <div class="card">
+            <h2>Password Generator</h2>
+            <div class="password-options">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="uppercase" checked>
+                    <label for="uppercase">Uppercase Letters</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="lowercase" checked>
+                    <label for="lowercase">Lowercase Letters</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="numbers" checked>
+                    <label for="numbers">Numbers</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="symbols">
+                    <label for="symbols">Special Characters</label>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="length">Password Length:</label>
+                <input type="number" id="length" value="12" min="4" max="50">
+            </div>
+            <div class="input-group">
+                <input type="text" id="generated-password" readonly>
+            </div>
+            <button onclick="generatePassword()">Generate Password</button>
+            <button onclick="copyPassword()">Copy</button>
+            <div class="password-history">
+                <h3>Password History</h3>
+                <div id="password-history-list"></div>
+            </div>
+        </div>
+
+        <!-- Webhook Tool Section -->
+        <div class="card">
+            <h2>Webhook Tool</h2>
+            <div class="input-group">
+                <label for="webhook-url">Webhook URL:</label>
+                <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
+            </div>
+            <div class="input-group">
+                <label for="webhook-name">Name:</label>
+                <input type="text" id="webhook-name" placeholder="Webhook Bot">
+            </div>
+            <div class="input-group">
+                <label for="webhook-message">Message:</label>
+                <textarea id="webhook-message" rows="4"></textarea>
+            </div>
+            <button onclick="sendWebhook()">Send</button>
+            <button onclick="clearWebhookHistory()">Clear History</button>
+            <div class="webhook-history">
+                <h3>Sent Messages History</h3>
+                <div id="webhook-history-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
