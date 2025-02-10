@@ -1,6 +1,6 @@
 // Password Generator Logic
 function generatePassword() {
-    const length = document.getElementById('length').value;
+    const length = parseInt(document.getElementById('length').value);
     const hasUpper = document.getElementById('uppercase').checked;
     const hasLower = document.getElementById('lowercase').checked;
     const hasNumbers = document.getElementById('numbers').checked;
@@ -52,7 +52,7 @@ function addToPasswordHistory(password) {
 // Webhook Tool Logic
 async function sendWebhook() {
     const url = document.getElementById('webhook-url').value;
-    const name = document.getElementById('webhook-name').value;
+    const name = document.getElementById('webhook-name').value || 'Webhook Bot';
     const message = document.getElementById('webhook-message').value;
 
     if (!url || !message) {
@@ -67,7 +67,7 @@ async function sendWebhook() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: name || 'Webhook Bot',
+                username: name,
                 content: message
             })
         });
@@ -77,9 +77,10 @@ async function sendWebhook() {
             document.getElementById('webhook-message').value = '';
             alert('Message sent!');
         } else {
-            alert('Error sending message');
+            throw new Error('Failed to send message');
         }
     } catch (error) {
+        console.error(error); // Log the error to the console for debugging
         alert('Error: ' + error.message);
     }
 }
@@ -96,5 +97,6 @@ function addToWebhookHistory(message) {
 }
 
 function clearWebhookHistory() {
-    document.getElementById('webhook-history-list').innerHTML = '';
+    const historyList = document.getElementById('webhook-history-list');
+    historyList.innerHTML = ''; // Clear the entire history
 }
