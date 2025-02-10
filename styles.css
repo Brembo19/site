@@ -92,19 +92,16 @@ input[type="range"]::-moz-range-thumb {
     margin-bottom: 10px;
 }
 
+/* Button Group */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Footer Section */
 footer {
     text-align: center;
     margin-top: 20px;
     font-size: 14px;
     color: #bbb;
-}
-
-/* IP Info */
-#ip-info {
-    background-color: #333;
-    padding: 15px;
-    border-radius: 8px;
-    color: white;
-    margin-top: 10px;
 }
