@@ -45,11 +45,11 @@ function updateLengthValue() {
 // Webhook Tool Logic
 async function sendWebhook() {
     const url = document.getElementById('webhook-url').value;
-    const name = document.getElementById('webhook-name').value || "Webhook Bot";
+    const name = document.getElementById('webhook-name').value;
     const message = document.getElementById('webhook-message').value;
 
     if (!url || !message) {
-        alert('Please fill out the URL and message!');
+        alert('Please provide both a URL and a message!');
         return;
     }
 
@@ -60,48 +60,51 @@ async function sendWebhook() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: name,
+                username: name || 'Webhook Bot',
                 content: message
             })
         });
 
         if (response.ok) {
-            alert('Webhook message sent!');
+            alert('Message sent successfully!');
         } else {
-            alert('Error sending message.');
+            alert('Error while sending message');
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        alert('Error while sending message: ' + error.message);
     }
 }
 
-// IP Tool Logic
-async function getIPInfo() {
+// IP Lookup Logic
+async function lookupIP() {
     const ipAddress = document.getElementById('ip-address').value;
-    const token = "889d25ffe7b504";
-    const url = `https://ipinfo.io/${ipAddress}?token=${token}`;
+    const ipInfoDiv = document.getElementById('ip-info');
 
     if (!ipAddress) {
-        alert('Please enter an IP address!');
+        alert('Please enter a valid IP address!');
         return;
     }
+
+    const token = '889d25ffe7b504'; // Use your actual token
+    const url = `https://ipinfo.io/${ipAddress}/json?token=${token}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
         if (data.error) {
-            alert('Error fetching IP information.');
+            ipInfoDiv.innerHTML = `Error: ${data.error.message}`;
         } else {
-            const ipInfo = `
-                <p><strong>IP:</strong> ${data.ip}</p>
-                <p><strong>Location:</strong> ${data.city}, ${data.region}, ${data.country}</p>
-                <p><strong>Organization:</strong> ${data.org}</p>
-                <p><strong>Hostname:</strong> ${data.hostname}</p>
+            ipInfoDiv.innerHTML = `
+                <strong>IP Info for ${data.ip}</strong><br>
+                City: ${data.city}<br>
+                Region: ${data.region}<br>
+                Country: ${data.country}<br>
+                Location: ${data.loc}<br>
+                Organization: ${data.org}
             `;
-            document.getElementById('ip-info').innerHTML = ipInfo;
         }
     } catch (error) {
-        alert('Error: ' + error.message);
+        ipInfoDiv.innerHTML = `Error: ${error.message}`;
     }
 }
