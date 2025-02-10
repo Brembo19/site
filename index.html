@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Password Generator, Webhook Tool, and IP Info</title>
+    <title>Password Generator & Webhook Tool</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,11 +15,11 @@
             <div class="password-options">
                 <div class="checkbox-group">
                     <input type="checkbox" id="uppercase" checked>
-                    <label for="uppercase">Uppercase letters</label>
+                    <label for="uppercase">Uppercase Letters</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="lowercase" checked>
-                    <label for="lowercase">Lowercase letters</label>
+                    <label for="lowercase">Lowercase Letters</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="numbers" checked>
@@ -27,18 +27,18 @@
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="symbols">
-                    <label for="symbols">Special symbols</label>
+                    <label for="symbols">Special Characters</label>
                 </div>
             </div>
             <div class="input-group">
                 <label for="length">Password Length: <span id="lengthValue">12</span></label>
-                <input type="range" id="length" min="4" max="32" value="12" oninput="updateLengthValue()">
+                <input type="range" id="length" min="4" max="32" value="12" onchange="updateLengthValue()">
             </div>
             <div class="input-group">
                 <input type="text" id="generated-password" readonly>
             </div>
             <button onclick="generatePassword()">Generate Password</button>
-            <button onclick="copyPassword()">Copy</button>
+            <button onclick="copyPassword()">Copy Password</button>
         </div>
 
         <!-- Webhook Tool Section -->
@@ -49,31 +49,31 @@
                 <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
             </div>
             <div class="input-group">
-                <label for="webhook-name">Name:</label>
+                <label for="webhook-name">Webhook Name:</label>
                 <input type="text" id="webhook-name" placeholder="Webhook Bot">
             </div>
             <div class="input-group">
                 <label for="webhook-message">Message:</label>
                 <textarea id="webhook-message" rows="4"></textarea>
             </div>
-            <button onclick="sendWebhook()">Send</button>
+            <button onclick="sendWebhook()">Send Webhook</button>
+            <button onclick="clearWebhookHistory()">Clear History</button>
         </div>
 
-        <!-- IP Info Tool Section -->
+        <!-- IP Tool Section -->
         <div class="card">
-            <h2>IP Info Tool</h2>
+            <h2>IP Tool</h2>
             <div class="input-group">
-                <label for="ip-address">Enter IP Address:</label>
-                <input type="text" id="ip-address" placeholder="IP address">
+                <label for="ip-address">IP Address:</label>
+                <input type="text" id="ip-address" placeholder="Enter IP address">
             </div>
-            <button onclick="getIpInfo()">Get IP Info</button>
-            <div class="input-group">
-                <textarea id="ip-info" rows="6" readonly></textarea>
-            </div>
+            <button onclick="getIPInfo()">Get IP Info</button>
+            <div id="ip-info"></div>
         </div>
 
+        <!-- Footer Section -->
         <footer>
-            <p>Made with ❤️ by Brembo.py</p>
+            <p>Created with <span style="color: #1a73e8;">Brembo.py</span></p>
         </footer>
     </div>
 
