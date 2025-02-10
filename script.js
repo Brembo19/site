@@ -39,8 +39,7 @@ function generatePassword() {
 }
 
 function copyPassword() {
-    const password = passwordDisplay.textContent;
-    navigator.clipboard.writeText(password)
+    navigator.clipboard.writeText(passwordDisplay.textContent)
         .then(() => alert('Password copied!'))
         .catch(err => alert('Error copying: ' + err));
 }
