@@ -1,47 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Password Generator</h1>
-        <div class="password-display">
-            <span id="passwordDisplay">Click Generate</span>
-            <button onclick="copyPassword()">Copy</button>
-        </div>
-        <div class="settings">
-            <div class="length-control">
-                <label for="lengthSlider">Password Length: <span id="lengthValue">12</span></label>
-                <input type="range" min="8" max="32" value="12" id="lengthSlider">
-            </div>
-            <div class="character-types">
-                <label>
-                    <input type="checkbox" id="uppercaseCheck" checked> 
-                    Uppercase (A-Z)
-                </label>
-                <label>
-                    <input type="checkbox" id="lowercaseCheck" checked> 
-                    Lowercase (a-z)
-                </label>
-                <label>
-                    <input type="checkbox" id="numbersCheck" checked> 
-                    Numbers (0-9)
-                </label>
-                <label>
-                    <input type="checkbox" id="symbolsCheck" checked> 
-                    Symbols (!@#$%^&*)
-                </label>
-            </div>
-        </div>
-        <button onclick="generatePassword()" class="generate-btn">
-            Generate Password
-        </button>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+<button 
+    class="copy-btn" 
+    onclick="copyPassword()"
+    data-copied-text="Copied!"
+>
+    <span class="copy-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+    </span>
+    <span class="copy-text">Copy</span>
+</button>
+
+<style>
+.copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #ff7b00, #ff5400);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 90, 0, 0.3);
+}
+
+.copy-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(255, 90, 0, 0.4);
+}
+
+.copy-btn .copy-icon {
+    display: flex;
+    align-items: center;
+}
+
+.copy-btn .copy-icon svg {
+    stroke: white;
+    width: 20px;
+    height: 20px;
+}
+
+.copy-btn.copied {
+    background: linear-gradient(135deg, #32a852, #28d65f);
+}
+
+.copy-btn.copied .copy-text::after {
+    content: attr(data-copied-text);
+}
+</style>
+
+<script>
+function copyPassword() {
+    const passwordDisplay = document.getElementById('passwordDisplay');
+    const copyBtn = document.querySelector('.copy-btn');
+    
+    if (passwordDisplay.textContent !== 'Click Generate') {
+        navigator.clipboard.writeText(passwordDisplay.textContent).then(() => {
+            copyBtn.classList.add('copied');
+            copyBtn.querySelector('.copy-text').dataset.copiedText = 'Copied!';
+            
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.querySelector('.copy-text').dataset.copiedText = 'Copy';
+            }, 2000);
+        });
+    }
+}
+</script>
