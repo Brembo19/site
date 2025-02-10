@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Generator & Webhook Tool</title>
+    <title>Secure Password Generator, Webhook Tool, and IP Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,11 +15,11 @@
             <div class="password-options">
                 <div class="checkbox-group">
                     <input type="checkbox" id="uppercase" checked>
-                    <label for="uppercase">Uppercase Letters</label>
+                    <label for="uppercase">Uppercase letters</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="lowercase" checked>
-                    <label for="lowercase">Lowercase Letters</label>
+                    <label for="lowercase">Lowercase letters</label>
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="numbers" checked>
@@ -26,7 +27,7 @@
                 </div>
                 <div class="checkbox-group">
                     <input type="checkbox" id="symbols">
-                    <label for="symbols">Special Characters</label>
+                    <label for="symbols">Special symbols</label>
                 </div>
             </div>
             <div class="input-group">
@@ -38,10 +39,6 @@
             </div>
             <button onclick="generatePassword()">Generate Password</button>
             <button onclick="copyPassword()">Copy</button>
-            <div class="password-history">
-                <h3>Password History</h3>
-                <div id="password-history-list"></div>
-            </div>
         </div>
 
         <!-- Webhook Tool Section -->
@@ -60,12 +57,24 @@
                 <textarea id="webhook-message" rows="4"></textarea>
             </div>
             <button onclick="sendWebhook()">Send</button>
-            <button onclick="clearWebhookHistory()">Clear History</button>
-            <div class="webhook-history">
-                <h3>Sent Messages History</h3>
-                <div id="webhook-history-list"></div>
+        </div>
+
+        <!-- IP Info Tool Section -->
+        <div class="card">
+            <h2>IP Info Tool</h2>
+            <div class="input-group">
+                <label for="ip-address">Enter IP Address:</label>
+                <input type="text" id="ip-address" placeholder="IP address">
+            </div>
+            <button onclick="getIpInfo()">Get IP Info</button>
+            <div class="input-group">
+                <textarea id="ip-info" rows="6" readonly></textarea>
             </div>
         </div>
+
+        <footer>
+            <p>Made with ❤️ by Brembo.py</p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
