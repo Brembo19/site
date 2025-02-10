@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Discord Webhook Tool</h1>
+        <form id="webhookForm">
+            <label>Webhook URL: <input type="text" id="webhookUrl" required></label>
+            <label>Webhook Name: <input type="text" id="webhookName"></label>
+            <label>Avatar URL: <input type="text" id="avatarUrl"></label>
+            <label>Message: <textarea id="message" rows="4"></textarea></label>
+            <button type="button" onclick="sendWebhook()">Send Message</button>
+        </form>
+        <a href="index.html" class="back-btn">Back to Generator</a>
+    </main>
+    <script src="webhook.js"></script>
+</body>
+</html>
