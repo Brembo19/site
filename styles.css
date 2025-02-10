@@ -16,7 +16,7 @@ body {
 
 /* Main container */
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     background-color: #1f1f1f;
     padding: 30px;
@@ -32,6 +32,7 @@ body {
     margin-bottom: 30px;
 }
 
+/* Header Styling */
 h2 {
     color: #1a73e8;
     font-weight: 600;
@@ -50,6 +51,7 @@ input, textarea, button {
     margin-bottom: 15px;
 }
 
+/* Button Styling */
 button {
     background-color: #1a73e8;
     border: none;
@@ -96,6 +98,17 @@ input[type="range"]::-moz-range-thumb {
 .button-group {
     display: flex;
     justify-content: space-between;
+}
+
+/* IP Info Styling */
+.ip-info {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    word-wrap: break-word;
+    font-size: 14px;
 }
 
 /* Footer Section */
