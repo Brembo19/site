@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Generator</title>
+    <title>All-in-One Tool: Password Generator, Webhook & IP Lookup</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -41,6 +41,36 @@
                 <button onclick="generatePassword()">Generate Password</button>
                 <button onclick="copyPassword()">Copy Password</button>
             </div>
+        </div>
+
+        <!-- Webhook Tool Section -->
+        <div class="card">
+            <h2>Webhook Tool</h2>
+            <div class="input-group">
+                <label for="webhook-url">Webhook URL:</label>
+                <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
+            </div>
+            <div class="input-group">
+                <label for="webhook-name">Name:</label>
+                <input type="text" id="webhook-name" placeholder="Webhook Bot">
+            </div>
+            <div class="input-group">
+                <label for="webhook-message">Message:</label>
+                <textarea id="webhook-message" rows="4"></textarea>
+            </div>
+            <button onclick="sendWebhook()">Send Webhook</button>
+            <button onclick="clearWebhookHistory()">Clear History</button>
+        </div>
+
+        <!-- IP Lookup Section -->
+        <div class="card">
+            <h2>IP Lookup Tool</h2>
+            <div class="input-group">
+                <label for="ip-address">Enter IP Address:</label>
+                <input type="text" id="ip-address" placeholder="e.g. 8.8.8.8">
+            </div>
+            <button onclick="lookupIP()">Lookup IP</button>
+            <div id="ip-info" class="ip-info"></div>
         </div>
 
         <!-- Footer Section -->
