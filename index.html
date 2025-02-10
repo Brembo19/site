@@ -3,43 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Generator</title>
+    <title>Secure Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
-        <h1>Password Generator</h1>
-        <div>
-            <span id="passwordDisplay">Click Generate</span>
-            <button onclick="copyPassword()">Copy</button>
-        </div>
-        <div>
-            <div>
+    <main class="container" aria-labelledby="page-title">
+        <h1 id="page-title">Secure Password Generator</h1>
+        <section class="password-display" aria-live="polite">
+            <output class="password-text" id="passwordDisplay" aria-label="Generated Password">Click Generate</output>
+            <button 
+                class="copy-btn" 
+                onclick="copyPassword()" 
+                aria-label="Copy Password"
+                title="Copy generated password"
+            >
+                Copy
+            </button>
+        </section>
+        <form class="settings" id="passwordSettings">
+            <div class="length-control">
                 <label for="lengthSlider">Password Length: <span id="lengthValue">12</span></label>
-                <input type="range" min="8" max="32" value="12" id="lengthSlider">
+                <input 
+                    type="range" 
+                    min="8" 
+                    max="32" 
+                    value="12" 
+                    id="lengthSlider" 
+                    aria-describedby="length-description"
+                >
+                <small id="length-description" class="hint">Slide to adjust password length (8-32 characters)</small>
             </div>
-            <div>
+            <fieldset>
+                <legend>Include Characters:</legend>
                 <label>
-                    <input type="checkbox" id="uppercaseCheck" checked> 
+                    <input 
+                        type="checkbox" 
+                        id="uppercaseCheck" 
+                        name="characterTypes" 
+                        checked 
+                        aria-describedby="uppercase-desc"
+                    > 
                     Uppercase (A-Z)
+                    <span id="uppercase-desc" class="sr-only">Include uppercase letters in password</span>
                 </label>
                 <label>
-                    <input type="checkbox" id="lowercaseCheck" checked> 
+                    <input 
+                        type="checkbox" 
+                        id="lowercaseCheck" 
+                        name="characterTypes" 
+                        checked
+                        aria-describedby="lowercase-desc"
+                    > 
                     Lowercase (a-z)
+                    <span id="lowercase-desc" class="sr-only">Include lowercase letters in password</span>
                 </label>
                 <label>
-                    <input type="checkbox" id="numbersCheck" checked> 
+                    <input 
+                        type="checkbox" 
+                        id="numbersCheck" 
+                        name="characterTypes" 
+                        checked
+                        aria-describedby="numbers-desc"
+                    > 
                     Numbers (0-9)
+                    <span id="numbers-desc" class="sr-only">Include numbers in password</span>
                 </label>
                 <label>
-                    <input type="checkbox" id="symbolsCheck" checked> 
+                    <input 
+                        type="checkbox" 
+                        id="symbolsCheck" 
+                        name="characterTypes" 
+                        checked
+                        aria-describedby="symbols-desc"
+                    > 
                     Symbols (!@#$%^&*)
+                    <span id="symbols-desc" class="sr-only">Include special symbols in password</span>
                 </label>
-            </div>
-        </div>
-        <button onclick="generatePassword()">
+            </fieldset>
+        </form>
+        <button 
+            class="generate-btn" 
+            onclick="generatePassword()" 
+            aria-controls="passwordDisplay"
+        >
             Generate Password
         </button>
-    </div>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
