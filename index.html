@@ -31,8 +31,8 @@
                 </div>
             </div>
             <div class="input-group">
-                <label for="length">Password Length:</label>
-                <input type="number" id="length" value="12" min="4" max="50">
+                <label for="length">Password Length: <span id="lengthValue">12</span></label>
+                <input type="range" id="length" min="4" max="32" value="12" oninput="updateLengthValue()">
             </div>
             <div class="input-group">
                 <input type="text" id="generated-password" readonly>
