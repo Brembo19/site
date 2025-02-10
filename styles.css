@@ -1,3 +1,4 @@
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -5,44 +6,47 @@
     font-family: Arial, sans-serif;
 }
 
+/* Body */
 body {
-    background: #1c1c1c;
-    color: #fff;
+    background-color: #121212;  /* Dark background */
+    color: #fff;                /* White text color */
     padding: 20px;
 }
 
+/* Main container */
 .container {
     max-width: 800px;
     margin: 0 auto;
-}
-
-.card {
-    background: #333;
+    background-color: #1f1f1f;  /* Darker background for the container */
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Card for password generator & webhook tool */
+.card {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     margin-bottom: 20px;
 }
 
+/* Heading */
 h2 {
-    color: #1a73e8;
+    color: #1a73e8;  /* Blue color for heading */
     margin-bottom: 20px;
 }
 
-.input-group {
-    margin-bottom: 15px;
-}
-
-input, textarea {
+/* Input and button styling */
+input, textarea, button {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
     border-radius: 4px;
     margin-top: 5px;
-    background: #444;
-    color: #fff;
+    border: 1px solid #444;
 }
 
+/* Button colors */
 button {
     background: #1a73e8;
     color: white;
@@ -57,8 +61,90 @@ button:hover {
     background: #1557b0;
 }
 
+/* Checkbox and slider control */
+.checkbox-group, .slider-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+/* Password History Section */
+.password-history, .webhook-history {
+    margin-top: 15px;
+}
+
+/* History Item Styling */
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+/* Password History List */
+#password-history-list, #webhook-history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Label and text inputs */
+label {
+    color: #bbb;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    background: #444;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #1a73e8;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 10px;
+    background: #444;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #1a73e8;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 10px;
+    background: #444;
+}
+
+/* Password Text */
+#generated-password {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+/* Footer */
 footer {
     text-align: center;
-    color: #888;
-    margin-top: 30px;
+    margin-top: 20px;
+    color: #bbb;
 }
