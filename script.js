@@ -37,6 +37,12 @@ function copyPassword() {
     alert('Password copied!');
 }
 
+// Update the length value displayed based on slider input
+function updateLengthValue() {
+    const length = document.getElementById('length').value;
+    document.getElementById('lengthValue').textContent = length;
+}
+
 // Webhook Tool Logic
 async function sendWebhook() {
     const url = document.getElementById('webhook-url').value;
