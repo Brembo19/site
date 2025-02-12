@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One Tool: Password Generator, Webhook & IP Lookup</title>
+    <title>All-in-One Tool: Password Generator, Webhook, IP Lookup & Proxy Selector</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -59,7 +59,6 @@
                 <textarea id="webhook-message" rows="4"></textarea>
             </div>
             <button onclick="sendWebhook()">Send Webhook</button>
-            <button onclick="clearWebhookHistory()">Clear History</button>
         </div>
 
         <!-- IP Lookup Section -->
@@ -71,6 +70,22 @@
             </div>
             <button onclick="lookupIP()">Lookup IP</button>
             <div id="ip-info" class="ip-info"></div>
+        </div>
+
+        <!-- Proxy Selector Section -->
+        <div class="card">
+            <h2>Proxy Selector</h2>
+            <div class="input-group">
+                <label for="proxy-type">Select Proxy Type:</label>
+                <select id="proxy-type">
+                    <option value="https">HTTPS</option>
+                    <option value="socks4">SOCKS4</option>
+                    <option value="socks5">SOCKS5</option>
+                </select>
+            </div>
+            <button onclick="fetchProxies()">Get Proxies</button>
+            <button onclick="downloadProxies()">Download Proxies</button>
+            <div id="proxy-list" class="ip-info"></div>
         </div>
 
         <!-- Footer Section -->
