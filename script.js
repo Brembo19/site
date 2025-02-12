@@ -22,11 +22,6 @@ function generatePassword() {
         return;
     }
 
-    if (isNaN(length) || length <= 0) {
-        alert('Please enter a valid password length!');
-        return;
-    }
-
     let password = '';
     for (let i = 0; i < length; i++) {
         password += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -42,82 +37,43 @@ function copyPassword() {
     alert('Password copied to clipboard!');
 }
 
-function updateLengthValue() {
-    const lengthValue = document.getElementById('length').value;
-    document.getElementById('lengthValue').textContent = lengthValue;
-}
+// Proxy Fetching Logic
+async function fetchProxies() {
+    const proxyType = document.getElementById("proxy-type").value;
+    const proxyListDiv = document.getElementById("proxy-list");
 
-// Webhook Tool Logic
-async function sendWebhook() {
-    const url = document.getElementById('webhook-url').value;
-    const name = document.getElementById('webhook-name').value;
-    const message = document.getElementById('webhook-message').value;
-
-    if (!url || !message) {
-        alert('Please provide both a URL and a message!');
+    if (proxyType === "socks5") {
+        proxyListDiv.innerHTML = "<strong>SOCKS5 is currently not available.</strong>";
         return;
     }
 
-    // Validate URL format
-    try {
-        new URL(url);
-    } catch (error) {
-        alert('Please enter a valid URL!');
-        return;
-    }
+    const urls = {
+        https: "https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=http&proxy_format=ipport&format=text&timeout=20000",
+        socks4: "https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=socks4&proxy_format=ipport&format=text&timeout=20000"
+    };
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: name || 'Webhook Bot',
-                content: message
-            })
-        });
-
-        if (response.ok) {
-            alert('Message sent successfully!');
-        } else {
-            alert(`Error while sending message: ${response.statusText}`);
-        }
+        const response = await fetch(urls[proxyType]);
+        const text = await response.text();
+        proxyListDiv.innerHTML = `<strong>Available ${proxyType.toUpperCase()} Proxies:</strong><br><pre>${text}</pre>`;
+        localStorage.setItem("proxyData", text); // Save for downloading
     } catch (error) {
-        alert('Error while sending message: ' + error.message);
+        proxyListDiv.innerHTML = `<strong>Error fetching proxies:</strong> ${error.message}`;
     }
 }
 
-// IP Lookup Logic
-async function lookupIP() {
-    const ipAddress = document.getElementById('ip-address').value;
-    const ipInfoDiv = document.getElementById('ip-info');
-
-    if (!ipAddress) {
-        alert('Please enter a valid IP address!');
+function downloadProxies() {
+    const proxyData = localStorage.getItem("proxyData");
+    if (!proxyData) {
+        alert("No proxies available. Please fetch proxies first!");
         return;
     }
 
-    const token = '889d25ffe7b504'; // Use your actual token
-    const url = `https://ipinfo.io/${ipAddress}/json?token=${token}`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.error) {
-            ipInfoDiv.innerHTML = `Error: ${data.error.message}`;
-        } else {
-            ipInfoDiv.innerHTML = `
-                <strong>IP Info for ${data.ip}</strong><br>
-                City: ${data.city}<br>
-                Region: ${data.region}<br>
-                Country: ${data.country}<br>
-                Location: ${data.loc}<br>
-                Organization: ${data.org}
-            `;
-        }
-    } catch (error) {
-        ipInfoDiv.innerHTML = `Error: ${error.message}`;
-    }
+    const blob = new Blob([proxyData], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "proxies.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
