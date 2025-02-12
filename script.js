@@ -72,16 +72,15 @@ async function lookupIP() {
     }
 }
 
-// Proxy Fetching with CORS Proxy
+// Proxy Fetching from ProxyScrape API
 async function fetchProxies() {
     const proxyType = document.getElementById("proxy-type").value;
     const proxyListDiv = document.getElementById("proxy-list");
 
-    const corsProxy = "https://cors-anywhere.herokuapp.com/";
     const urls = {
-        https: corsProxy + "https://www.proxyscrape.com/api/v3/free-proxy-list?request=getproxies&proxy_format=ipport&format=text&type=http",
-        socks4: corsProxy + "https://www.proxyscrape.com/api/v3/free-proxy-list?request=getproxies&proxy_format=ipport&format=text&type=socks4",
-        socks5: corsProxy + "https://www.proxy-list.download/api/v1/get?type=socks5"
+        https: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all",
+        socks4: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=10000&country=all",
+        socks5: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000&country=all"
     };
 
     if (!urls[proxyType]) {
