@@ -54,17 +54,20 @@ async function fetchProxies() {
 
     try {
         const response = await fetch(urls[proxyType]);
+        if (!response.ok) throw new Error("Failed to fetch proxies.");
+
         const text = await response.text();
         proxyListDiv.innerHTML = `<strong>Available ${proxyType.toUpperCase()} Proxies:</strong><br><pre>${text}</pre>`;
-        localStorage.setItem("proxyData", text); // Save for downloading
+        localStorage.setItem("proxyData", text);
     } catch (error) {
-        proxyListDiv.innerHTML = `<strong>Error fetching proxies:</strong> ${error.message}`;
+        proxyListDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
     }
 }
 
 function downloadProxies() {
     const proxyData = localStorage.getItem("proxyData");
-    if (!proxyData) {
+
+    if (!proxyData || proxyData.trim() === "") {
         alert("No proxies available. Please fetch proxies first!");
         return;
     }
