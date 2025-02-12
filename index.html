@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One Tool: Password Generator, Webhook, IP Lookup & Proxy Selector</title>
+    <title>All-in-One Tool: Password Generator, Webhook & IP Lookup</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -72,20 +72,18 @@
             <div id="ip-info" class="ip-info"></div>
         </div>
 
-        <!-- Proxy Selector Section -->
+        <!-- Proxy Tool Section -->
         <div class="card">
-            <h2>Proxy Selector</h2>
-            <div class="input-group">
-                <label for="proxy-type">Select Proxy Type:</label>
-                <select id="proxy-type">
-                    <option value="https">HTTPS</option>
-                    <option value="socks4">SOCKS4</option>
-                    <option value="socks5">SOCKS5</option>
-                </select>
-            </div>
-            <button onclick="fetchProxies()">Get Proxies</button>
+            <h2>Proxy Fetch Tool</h2>
+            <label for="proxy-type">Select Proxy Type:</label>
+            <select id="proxy-type">
+                <option value="https">HTTPS</option>
+                <option value="socks4">SOCKS4</option>
+                <option value="socks5">SOCKS5</option>
+            </select>
+            <button onclick="fetchProxies()">Fetch Proxies</button>
             <button onclick="downloadProxies()">Download Proxies</button>
-            <div id="proxy-list" class="ip-info"></div>
+            <div id="proxy-list" class="proxy-info"></div>
         </div>
 
         <!-- Footer Section -->
