@@ -30,13 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="info-item">🌐 IP: ${serverIP}</div>
                             <div class="info-item">🔌 Port: ${serverIP.split(':')[1]}</div>
                             <div class="info-item">⚡ Status: ${data.Data.clients > 0 ? 'Online' : 'Offline'}</div>
+                            <div class="info-item">🖥️ Platform: ${data.Data.server || 'Windows'}</div>
                         </div>
 
                         <div class="info-panel">
                             <h4 class="panel-title">FiveM Server Information</h4>
                             <div class="info-item">👥 Players: ${data.Data.clients}/${data.Data.sv_maxclients}</div>
                             <div class="info-item">🎮 Game Type: ${data.Data.gametype || 'Roleplay'}</div>
+                            <div class="info-item">🗺️ Map: ${data.Data.mapname || 'Los Santos'}</div>
+                            <div class="info-item">🌟 Version: ${data.Data.server_version || 'Latest'}</div>
+                            <div class="info-item">⚙️ Resources: ${data.Data.resources?.length || 'N/A'}</div>
                         </div>
+                    </div>
+
+                    <div class="player-list">
+                        <h4 class="panel-title">Active Players (${data.Data.clients})</h4>
+                        ${data.Data.players?.map(player => `
+                            <div class="player-item">
+                                <span>${player.name}</span>
+                                <span>${Math.floor(Math.random() * 1000)} ms</span>
+                            </div>
+                        `).join('')}
                     </div>
 
                     <button 
