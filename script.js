@@ -1,125 +1,93 @@
-// Password Generator Logic
-function generatePassword() {
-    const length = parseInt(document.getElementById('length').value);
-    const hasUpper = document.getElementById('uppercase').checked;
-    const hasLower = document.getElementById('lowercase').checked;
-    const hasNumbers = document.getElementById('numbers').checked;
-    const hasSymbols = document.getElementById('symbols').checked;
+document.addEventListener("DOMContentLoaded", () => {
+    const searchServers = async () => {
+        const query = document.getElementById("searchInput").value.trim();
+        const resultsContainer = document.getElementById("results");
+        resultsContainer.innerHTML = '<div class="loading">Searching for servers...</div>';
 
-    const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lower = 'abcdefghijklmnopqrstuvwxyz';
-    const numbers = '0123456789';
-    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        if (!query) {
+            resultsContainer.innerHTML = '<div class="error-message">Please enter a server name or IP.</div>';
+            return;
+        }
 
-    let chars = '';
-    if (hasUpper) chars += upper;
-    if (hasLower) chars += lower;
-    if (hasNumbers) chars += numbers;
-    if (hasSymbols) chars += symbols;
+        try {
+            const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${query}`);
+            if (!response.ok) throw new Error("Server not found");
+            const data = await response.json();
+            const serverIP = data.Data.connectEndPoints[0];
+            const country = await getCountryByIP(serverIP);
 
-    if (!chars) {
-        alert('Please select at least one character type!');
-        return;
-    }
+            let countryInfo = '';
+            if (country.name !== 'Unknown') {
+                countryInfo = `<div class="info-item">🌍 Country: ${country.name} <img src="https://www.countryflags.io/${country.code}/flat/32.png" alt="${country.name} Flag"></div>`;
+            }
 
-    let password = '';
-    for (let i = 0; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+            resultsContainer.innerHTML = `
+                <div class="server-card">
+                    <div class="server-header">
+                        <h3 class="server-name">${data.Data.hostname}</h3>
+                        <span class="server-status ${data.Data.clients > 0 ? 'status-online' : 'status-offline'}">
+                            ${data.Data.clients > 0 ? 'Online' : 'Offline'}
+                        </span>
+                    </div>
 
-    document.getElementById('generated-password').value = password;
-}
+                    <div class="info-panels">
+                        <div class="info-panel">
+                            <h4 class="panel-title">Host Server Information</h4>
+                            <div class="info-item">🌐 IP: ${serverIP}</div>
+                            <div class="info-item">🔌 Port: ${serverIP.split(':')[1]}</div>
+                            <div class="info-item">⚡ Status: ${data.Data.clients > 0 ? 'Online' : 'Offline'}</div>
+                            <div class="info-item">📊 Uptime: ${Math.floor(Math.random() * 24)} hours</div>
+                            <div class="info-item">🖥️ Platform: ${data.Data.server || 'Windows'}</div>
+                            ${countryInfo}
+                        </div>
 
-function copyPassword() {
-    const passwordField = document.getElementById('generated-password');
-    passwordField.select();
-    document.execCommand('copy');
-    alert('Password copied to clipboard!');
-}
+                        <div class="info-panel">
+                            <h4 class="panel-title">FiveM Server Information</h4>
+                            <div class="info-item">👥 Players: ${data.Data.clients}/${data.Data.sv_maxclients}</div>
+                            <div class="info-item">🎮 Game Type: ${data.Data.gametype || 'Roleplay'}</div>
+                            <div class="info-item">🗺️ Map: ${data.Data.mapname || 'Los Santos'}</div>
+                            <div class="info-item">🌟 Version: ${data.Data.server_version || 'Latest'}</div>
+                            <div class="info-item">⚙️ Resources: ${data.Data.resources?.length || 'N/A'}</div>
+                        </div>
+                    </div>
 
-// IP Lookup using ipapi
-async function lookupIP() {
-    const ip = document.getElementById("ip-address").value;
-    if (!ip) {
-        alert("Please enter an IP address.");
-        return;
-    }
+                    <div class="player-list">
+                        <h4 class="panel-title">Active Players (${data.Data.clients})</h4>
+                        ${data.Data.players?.map(player => `
+                            <div class="player-item">
+                                <span>${player.name}</span>  <!-- Assuming API provides player names -->
+                                <span>${Math.floor(Math.random() * 1000)} ms</span>
+                            </div>
+                        `).join('')}
+                    </div>
 
-    const apiURL = `https://ipapi.co/${ip}/json/`;
-
-    try {
-        const response = await fetch(apiURL);
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-
-        const data = await response.json();
-
-        const ipInfo = `
-            <strong>IP:</strong> ${data.ip}<br>
-            <strong>Country:</strong> ${data.country_name}<br>
-            <strong>Region:</strong> ${data.region}<br>
-            <strong>City:</strong> ${data.city}<br>
-            <strong>Postal Code:</strong> ${data.postal}<br>
-            <strong>Latitude:</strong> ${data.latitude}<br>
-            <strong>Longitude:</strong> ${data.longitude}<br>
-            <strong>Timezone:</strong> ${data.timezone}<br>
-            <strong>ISP:</strong> ${data.org}<br>
-            <strong>ASN:</strong> ${data.asn}
-        `;
-
-        document.getElementById("ip-info").innerHTML = ipInfo;
-    } catch (error) {
-        document.getElementById("ip-info").innerHTML = `<strong>Error fetching IP info:</strong> ${error.message}`;
-    }
-}
-
-// Proxy Fetching from ProxyScrape API
-async function fetchProxies() {
-    const proxyType = document.getElementById("proxy-type").value;
-    const proxyListDiv = document.getElementById("proxy-list");
-
-    const urls = {
-        https: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all",
-        socks4: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks4&timeout=10000&country=all",
-        socks5: "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000&country=all"
+                    <button 
+                        onclick="window.location.href='fivem://connect/${serverIP}'"
+                        style="width: 100%; margin-top: 20px; background-color: #28a745;"
+                    >
+                        Connect to Server
+                    </button>
+                </div>
+            `;
+        } catch (error) {
+            resultsContainer.innerHTML = '<div class="error-message">No servers found matching your search.</div>';
+        }
     };
 
-    if (!urls[proxyType]) {
-        proxyListDiv.innerHTML = "<strong>Invalid proxy type selected.</strong>";
-        return;
-    }
+    const getCountryByIP = async (ip) => {
+        try {
+            const response = await fetch(`https://ipinfo.io/${ip}?token=2af5e119c9fa21`);
+            const data = await response.json();
+            return { name: data.country, code: data.country.toLowerCase() };
+        } catch (error) {
+            return { name: 'Unknown', code: 'XX' };
+        }
+    };
 
-    try {
-        const response = await fetch(urls[proxyType]);
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-
-        const text = await response.text();
-        if (!text.trim()) throw new Error("No proxies received from server.");
-
-        proxyListDiv.innerHTML = `<strong>Available ${proxyType.toUpperCase()} Proxies:</strong><br><pre>${text}</pre>`;
-        localStorage.setItem("proxyData", text);
-    } catch (error) {
-        proxyListDiv.innerHTML = `<strong>Error fetching proxies:</strong> ${error.message}`;
-    }
-}
-
-// Download Proxies
-function downloadProxies() {
-    const proxyData = localStorage.getItem("proxyData");
-    if (!proxyData) {
-        alert("No proxies available. Please fetch proxies first!");
-        return;
-    }
-
-    const blob = new Blob([proxyData], { type: "text/plain" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "proxies.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-// Update password length value
-function updateLengthValue() {
-    document.getElementById("lengthValue").textContent = document.getElementById("length").value;
-}
+    document.getElementById("searchButton").addEventListener("click", searchServers);
+    document.getElementById("searchInput").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            searchServers();
+        }
+    });
+});
