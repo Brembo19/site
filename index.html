@@ -3,93 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One Tool: Password Generator, Webhook & IP Lookup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>CFX Finder</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <!-- Password Generator Section -->
-        <div class="card">
-            <h2>Password Generator</h2>
-            <div class="password-options">
-                <div class="checkbox-group">
-                    <input type="checkbox" id="uppercase" checked>
-                    <label for="uppercase">Uppercase Letters</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="lowercase" checked>
-                    <label for="lowercase">Lowercase Letters</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="numbers" checked>
-                    <label for="numbers">Numbers</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="symbols">
-                    <label for="symbols">Special Characters</label>
-                </div>
-            </div>
-            <div class="input-group">
-                <label for="length">Password Length: <span id="lengthValue">12</span></label>
-                <input type="range" id="length" min="4" max="32" value="12" onchange="updateLengthValue()">
-            </div>
-            <div class="input-group">
-                <input type="text" id="generated-password" readonly>
-            </div>
-            <div class="button-group">
-                <button onclick="generatePassword()">Generate Password</button>
-                <button onclick="copyPassword()">Copy Password</button>
-            </div>
+        <h1>CFX Finder</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by server name or IP...">
+            <button id="searchButton">Search</button>
         </div>
-
-        <!-- Webhook Tool Section -->
-        <div class="card">
-            <h2>Webhook Tool</h2>
-            <div class="input-group">
-                <label for="webhook-url">Webhook URL:</label>
-                <input type="text" id="webhook-url" placeholder="https://discord.com/api/webhooks/...">
-            </div>
-            <div class="input-group">
-                <label for="webhook-name">Name:</label>
-                <input type="text" id="webhook-name" placeholder="Webhook Bot">
-            </div>
-            <div class="input-group">
-                <label for="webhook-message">Message:</label>
-                <textarea id="webhook-message" rows="4"></textarea>
-            </div>
-            <button onclick="sendWebhook()">Send Webhook</button>
-        </div>
-
-        <!-- IP Lookup Section -->
-        <div class="card">
-            <h2>IP Lookup Tool</h2>
-            <div class="input-group">
-                <label for="ip-address">Enter IP Address:</label>
-                <input type="text" id="ip-address" placeholder="e.g. 8.8.8.8">
-            </div>
-            <button onclick="lookupIP()">Lookup IP</button>
-            <div id="ip-info" class="ip-info"></div>
-        </div>
-
-        <!-- Proxy Tool Section -->
-        <div class="card">
-            <h2>Proxy Fetch Tool</h2>
-            <label for="proxy-type">Select Proxy Type:</label>
-            <select id="proxy-type">
-                <option value="https">HTTPS</option>
-                <option value="socks4">SOCKS4</option>
-                <option value="socks5">SOCKS5</option>
-            </select>
-            <button onclick="fetchProxies()">Fetch Proxies</button>
-            <button onclick="downloadProxies()">Download Proxies</button>
-            <div id="proxy-list" class="proxy-info"></div>
-        </div>
-
-        <!-- Footer Section -->
-        <footer>
-            <p>Created with <span style="color: #1a73e8;">Discord: Brembo.py</span></p>
-        </footer>
+        <div id="results"></div>
     </div>
 
     <script src="script.js"></script>
