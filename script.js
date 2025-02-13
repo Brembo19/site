@@ -3,12 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const query = document.getElementById("searchInput").value.trim();
         const resultsContainer = document.getElementById("results");
         resultsContainer.innerHTML = '<div class="loading">Searching for servers...</div>';
-
+        
         if (!query) {
             resultsContainer.innerHTML = '<div class="error-message">Please enter a server name or IP.</div>';
             return;
         }
-
+        
         try {
             const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${query}`);
             if (!response.ok) throw new Error("Server not found");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <h4 class="panel-title">Active Players (${data.Data.clients})</h4>
                         ${data.Data.players?.map(player => `
                             <div class="player-item">
-                                <span>${player.name}</span>  <!-- Assuming API provides player names -->
+                                <span>${player.name}</span>
                                 <span>${Math.floor(Math.random() * 1000)} ms</span>
                             </div>
                         `).join('')}
