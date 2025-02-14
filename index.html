@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFX Finder & Proxy Scraper</title>
+    <title>CFX Finder, Proxy Scraper & Password Generator</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="ad-banner">
-        <a href="https://tzproject.com/?referralId=895383205316804689" target="_blank">
-            <img src="https://shafivem.com/cdn/shop/files/tzprojectfivemcheatshacks.jpg?v=1727618408&width=800" alt="Ad Banner">
-        </a>
-    </div>
-
     <div class="container">
         <h1>CFX Finder</h1>
         <div class="search-box">
@@ -32,14 +26,22 @@
                 <option value="socks4">SOCKS4</option>
                 <option value="socks5">SOCKS5</option>
             </select>
-
-            <label for="proxySource">Select Proxy Source:</label>
-            <select id="proxySource">
-                <option value="proxyscrape">Proxyscrape</option>
-                <option value="dstat">Dstat</option>
-            </select>
-
             <button id="downloadProxies">Download Proxies</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Password Generator</h1>
+        <div class="password-settings">
+            <label for="passwordLength">Length:</label>
+            <input type="number" id="passwordLength" min="4" max="64" value="16">
+            <label><input type="checkbox" id="uppercase" checked> Uppercase (A-Z)</label>
+            <label><input type="checkbox" id="lowercase" checked> Lowercase (a-z)</label>
+            <label><input type="checkbox" id="numbers" checked> Numbers (0-9)</label>
+            <label><input type="checkbox" id="special" checked> Special Characters (@, #, !, etc.)</label>
+            <button id="generatePassword">Generate Password</button>
+            <input type="text" id="generatedPassword" readonly>
+            <button id="copyPassword">Copy</button>
         </div>
     </div>
 </body>
