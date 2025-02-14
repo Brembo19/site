@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFX Finder, Proxy Scraper & Password Generator</title>
+    <title>CFX Finder</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
 </head>
@@ -17,39 +17,10 @@
         </div>
         <div id="results"></div>
 
-        <!-- Password Generator Section -->
-        <h1>Password Generator</h1>
-        <div class="password-generator">
-            <div class="password-display">
-                <input type="text" id="generatedPassword" readonly>
-                <button id="copyPassword">📋</button>
-            </div>
-            
-            <div class="length-slider">
-                <label for="passwordLength">Length: <span id="lengthValue">16</span></label>
-                <input type="range" id="passwordLength" min="4" max="64" value="16">
-            </div>
-
-            <div class="options">
-                <button class="option" data-type="uppercase">A-Z</button>
-                <button class="option" data-type="lowercase">a-z</button>
-                <button class="option" data-type="numbers">0-9</button>
-                <button class="option" data-type="special">!@#$%</button>
-            </div>
-
-            <button id="generatePassword">Generate Password</button>
-        </div>
-
-        <!-- Proxy Scraper Section -->
-        <h1>Proxy Scraper</h1>
-        <div class="proxy-section">
-            <div class="proxy-selection">
-                <button id="httpProxies">Get HTTP Proxies</button>
-                <button id="socks4Proxies">Get SOCKS4 Proxies</button>
-                <button id="socks5Proxies">Get SOCKS5 Proxies</button>
-            </div>
-            <textarea id="proxyList" readonly></textarea>
-            <button id="downloadProxies">Download Proxies as bremboproxy.txt</button>
+        <!-- Buttons for TZ Project & Discord -->
+        <div class="buttons">
+            <button class="tz-btn" onclick="window.location.href='https://tzproject.com/?referralId=895383205316804689'">🔗 TZ Project</button>
+            <button class="discord-btn" onclick="window.location.href='https://discord.gg/7nAhcmQZtN'">💬 Join Discord</button>
         </div>
     </div>
 </body>
