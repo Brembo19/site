@@ -9,39 +9,47 @@
 </head>
 <body>
     <div class="container">
+        <!-- FiveM Finder Section -->
         <h1>CFX Finder</h1>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search by server name or IP...">
             <button id="searchButton">Search</button>
         </div>
         <div id="results"></div>
-    </div>
 
-    <div class="container">
+        <!-- Password Generator Section -->
+        <h1>Password Generator</h1>
+        <div class="password-generator">
+            <div class="password-display">
+                <input type="text" id="generatedPassword" readonly>
+                <button id="copyPassword">📋</button>
+            </div>
+            
+            <div class="length-slider">
+                <label for="passwordLength">Length: <span id="lengthValue">16</span></label>
+                <input type="range" id="passwordLength" min="4" max="64" value="16">
+            </div>
+
+            <div class="options">
+                <button class="option" data-type="uppercase">A-Z</button>
+                <button class="option" data-type="lowercase">a-z</button>
+                <button class="option" data-type="numbers">0-9</button>
+                <button class="option" data-type="special">!@#$%</button>
+            </div>
+
+            <button id="generatePassword">Generate Password</button>
+        </div>
+
+        <!-- Proxy Scraper Section -->
         <h1>Proxy Scraper</h1>
         <div class="proxy-section">
-            <label for="proxyType">Select Proxy Type:</label>
-            <select id="proxyType">
-                <option value="http">HTTP</option>
-                <option value="socks4">SOCKS4</option>
-                <option value="socks5">SOCKS5</option>
-            </select>
-            <button id="downloadProxies">Download Proxies</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <h1>Password Generator</h1>
-        <div class="password-settings">
-            <label for="passwordLength">Length:</label>
-            <input type="number" id="passwordLength" min="4" max="64" value="16">
-            <label><input type="checkbox" id="uppercase" checked> Uppercase (A-Z)</label>
-            <label><input type="checkbox" id="lowercase" checked> Lowercase (a-z)</label>
-            <label><input type="checkbox" id="numbers" checked> Numbers (0-9)</label>
-            <label><input type="checkbox" id="special" checked> Special Characters (@, #, !, etc.)</label>
-            <button id="generatePassword">Generate Password</button>
-            <input type="text" id="generatedPassword" readonly>
-            <button id="copyPassword">Copy</button>
+            <div class="proxy-selection">
+                <button id="httpProxies">Get HTTP Proxies</button>
+                <button id="socks4Proxies">Get SOCKS4 Proxies</button>
+                <button id="socks5Proxies">Get SOCKS5 Proxies</button>
+            </div>
+            <textarea id="proxyList" readonly></textarea>
+            <button id="downloadProxies">Download Proxies as bremboproxy.txt</button>
         </div>
     </div>
 </body>
