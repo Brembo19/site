@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // FiveM Server Finder Section
     const searchServers = async () => {
         const query = document.getElementById("searchInput").value.trim();
         const resultsContainer = document.getElementById("results");
@@ -16,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             const serverIP = data.Data.connectEndPoints[0];
             const country = await getCountryByIP(serverIP);
+            const ping = await getPing(serverIP);
 
             let countryInfo = '';
             if (country.name !== 'Unknown') {
@@ -33,17 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <div class="info-panels">
                         <div class="info-panel">
-                            <h4 class="panel-title">Host Server Information</h4>
+                            <h4 class="panel-title">Server Information</h4>
                             <div class="info-item">🌐 IP: ${serverIP}</div>
                             <div class="info-item">🔌 Port: ${serverIP.split(':')[1]}</div>
-                            <div class="info-item">⚡ Status: ${data.Data.clients > 0 ? 'Online' : 'Offline'}</div>
-                            <div class="info-item">📊 Uptime: ${Math.floor(Math.random() * 24)} hours</div>
+                            <div class="info-item">📊 Ping: ${ping} ms</div>
                             <div class="info-item">🖥️ Platform: ${data.Data.server || 'Windows'}</div>
                             ${countryInfo}
                         </div>
 
                         <div class="info-panel">
-                            <h4 class="panel-title">FiveM Server Information</h4>
+                            <h4 class="panel-title">FiveM Information</h4>
                             <div class="info-item">👥 Players: ${data.Data.clients}/${data.Data.sv_maxclients}</div>
                             <div class="info-item">🎮 Game Type: ${data.Data.gametype || 'Roleplay'}</div>
                             <div class="info-item">🗺️ Map: ${data.Data.mapname || 'Los Santos'}</div>
@@ -85,111 +84,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const getPing = async (ip) => {
+        try {
+            const startTime = performance.now();
+            await fetch(`https://${ip}`);
+            const endTime = performance.now();
+            return Math.round(endTime - startTime);
+        } catch (error) {
+            return "N/A";
+        }
+    };
+
     document.getElementById("searchButton").addEventListener("click", searchServers);
     document.getElementById("searchInput").addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
             searchServers();
         }
-    });
-
-    // Password Generator Section
-    const passwordField = document.getElementById("generatedPassword");
-    const lengthSlider = document.getElementById("passwordLength");
-    const lengthValue = document.getElementById("lengthValue");
-    const generateBtn = document.getElementById("generatePassword");
-    const copyBtn = document.getElementById("copyPassword");
-    const optionButtons = document.querySelectorAll(".option");
-
-    let options = {
-        uppercase: true,
-        lowercase: true,
-        numbers: true,
-        special: true
-    };
-
-    // Update password length
-    lengthSlider.addEventListener("input", () => {
-        lengthValue.textContent = lengthSlider.value;
-    });
-
-    // Toggle options
-    optionButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const type = button.dataset.type;
-            options[type] = !options[type];  
-            button.classList.toggle("active");
-        });
-    });
-
-    // Generate password
-    const generatePassword = () => {
-        const length = lengthSlider.value;
-        const chars = {
-            uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            lowercase: "abcdefghijklmnopqrstuvwxyz",
-            numbers: "0123456789",
-            special: "!@#$%^&*()_+{}[]<>?"
-        };
-
-        let availableChars = "";
-        Object.keys(options).forEach(type => {
-            if (options[type]) availableChars += chars[type];
-        });
-
-        if (!availableChars) {
-            passwordField.value = "Select at least one option!";
-            return;
-        }
-
-        let password = "";
-        for (let i = 0; i < length; i++) {
-            password += availableChars[Math.floor(Math.random() * availableChars.length)];
-        }
-
-        passwordField.value = password;
-    };
-
-    // Copy password
-    copyBtn.addEventListener("click", () => {
-        passwordField.select();
-        document.execCommand("copy");
-        alert("Password copied to clipboard!");
-    });
-
-    generateBtn.addEventListener("click", generatePassword);
-
-    // Proxy Scraper Section
-    const proxyListField = document.getElementById("proxyList");
-    const downloadBtn = document.getElementById("downloadProxies");
-
-    const fetchProxies = async (url) => {
-        try {
-            const response = await fetch(url);
-            const data = await response.text();
-            proxyListField.value = data;
-        } catch (error) {
-            alert("Error fetching proxies: " + error);
-        }
-    };
-
-    document.getElementById("httpProxies").addEventListener("click", () => {
-        fetchProxies("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=http&proxy_format=ipport&format=text&timeout=20000");
-    });
-
-    document.getElementById("socks4Proxies").addEventListener("click", () => {
-        fetchProxies("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=socks4&proxy_format=ipport&format=text&timeout=20000");
-    });
-
-    document.getElementById("socks5Proxies").addEventListener("click", () => {
-        fetchProxies("https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=socks5&proxy_format=ipport&format=text&timeout=20000");
-    });
-
-    // Download proxies as a text file
-    downloadBtn.addEventListener("click", () => {
-        const blob = new Blob([proxyListField.value], { type: "text/plain;charset=utf-8" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "bremboproxy.txt";
-        link.click();
     });
 });
