@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             const serverIP = data.Data.connectEndPoints[0];
             const country = await getCountryByIP(serverIP);
-            const ping = await getPing(serverIP);
 
             let countryInfo = '';
             if (country.name !== 'Unknown') {
@@ -36,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             <h4 class="panel-title">Server Information</h4>
                             <div class="info-item">🌐 IP: ${serverIP}</div>
                             <div class="info-item">🔌 Port: ${serverIP.split(':')[1]}</div>
-                            <div class="info-item">📊 Ping: ${ping} ms</div>
                             <div class="info-item">🖥️ Platform: ${data.Data.server || 'Windows'}</div>
                             ${countryInfo}
                         </div>
@@ -56,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${data.Data.players?.map(player => `
                             <div class="player-item">
                                 <span>${player.name}</span>
-                                <span>${Math.floor(Math.random() * 1000)} ms</span>
                             </div>
                         `).join('')}
                     </div>
@@ -81,17 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return { name: data.country, code: data.country.toLowerCase() };
         } catch (error) {
             return { name: 'Unknown', code: 'XX' };
-        }
-    };
-
-    const getPing = async (ip) => {
-        try {
-            const startTime = performance.now();
-            await fetch(`https://${ip}`);
-            const endTime = performance.now();
-            return Math.round(endTime - startTime);
-        } catch (error) {
-            return "N/A";
         }
     };
 
