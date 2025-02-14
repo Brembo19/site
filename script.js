@@ -90,4 +90,32 @@ document.addEventListener("DOMContentLoaded", () => {
             searchServers();
         }
     });
+
+    document.getElementById("downloadProxies").addEventListener("click", async () => {
+        const proxyType = document.getElementById("proxyType").value;
+        const proxySource = document.getElementById("proxySource").value;
+        let apiUrl = "";
+
+        if (proxySource === "proxyscrape") {
+            apiUrl = `https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=${proxyType}&proxy_format=protocolipport&format=text&timeout=20000`;
+        } else if (proxySource === "dstat") {
+            apiUrl = `https://dstat.vip/download-proxies?protocol=${proxyType}`;
+        }
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error("Failed to fetch proxies");
+            const proxies = await response.text();
+
+            const blob = new Blob([proxies], { type: "text/plain" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "bremboproxy.txt";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            alert("Error fetching proxies: " + error.message);
+        }
+    });
 });
