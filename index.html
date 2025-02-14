@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFX Finder</title>
+    <title>CFX Finder & Proxy Scraper</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
 </head>
@@ -21,6 +21,26 @@
             <button id="searchButton">Search</button>
         </div>
         <div id="results"></div>
+    </div>
+
+    <div class="container">
+        <h1>Proxy Scraper</h1>
+        <div class="proxy-section">
+            <label for="proxyType">Select Proxy Type:</label>
+            <select id="proxyType">
+                <option value="http">HTTP</option>
+                <option value="socks4">SOCKS4</option>
+                <option value="socks5">SOCKS5</option>
+            </select>
+
+            <label for="proxySource">Select Proxy Source:</label>
+            <select id="proxySource">
+                <option value="proxyscrape">Proxyscrape</option>
+                <option value="dstat">Dstat</option>
+            </select>
+
+            <button id="downloadProxies">Download Proxies</button>
+        </div>
     </div>
 </body>
 </html>
