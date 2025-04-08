@@ -1,656 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOLO-PASS | Quantum Password Generator</title>
-    <style>
-        :root {
-            --hologram-blue: rgba(0, 255, 255, 0.8);
-            --hologram-pink: rgba(255, 0, 255, 0.8);
-            --hologram-purple: rgba(150, 0, 255, 0.8);
-            --dark-space: #0a0a1a;
-            --deep-space: #050510;
-            --glow-effect: 0 0 15px currentColor;
-            --scanline: repeating-linear-gradient(
-                to bottom,
-                transparent,
-                transparent 1px,
-                rgba(0, 255, 255, 0.05) 2px,
-                rgba(0, 255, 255, 0.05) 3px
-            );
-            --transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>0x7F | Ghost in the Shell</title>
+  <style>
+   
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+      overflow: hidden;
+    }
 
-        @font-face {
-            font-family: 'Orbitron';
-            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        }
+   
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 5, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 5px currentColor;
-        }
+    
+    .title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-        body {
-            background: 
-                radial-gradient(circle at 20% 30%, var(--hologram-purple), transparent 40%),
-                radial-gradient(circle at 80% 70%, var(--hologram-blue), transparent 40%),
-                var(--dark-space);
-            color: var(--hologram-blue);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow: hidden;
-            position: relative;
-        }
+    .title h1 {
+      font-size: 3rem;
+      color: #0f0;
+      text-shadow: 0 0 5px #0f0;
+      margin: 0;
+    }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--scanline);
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.3;
-        }
+    .title h2 {
+      font-size: 1.5rem;
+      margin: 5px 0 0 0;
+      font-weight: normal;
+      opacity: 0.8;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: rgba(10, 10, 30, 0.3);
-            border: 1px solid var(--hologram-blue);
-            border-radius: 20px;
-            box-shadow: 
-                0 0 30px rgba(0, 255, 255, 0.2),
-                inset 0 0 20px rgba(0, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-            animation: hologram-pulse 6s infinite alternate;
-        }
+  
+    .bio-container {
+      max-width: 800px;
+      border: 1px solid #0a0;
+      padding: 30px;
+      background-color: rgba(0, 10, 0, 0.7);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+      margin: 0 20px;
+    }
 
-        @keyframes hologram-pulse {
-            0% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.2); }
-            50% { box-shadow: 0 0 50px rgba(150, 0, 255, 0.3); }
-            100% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.2); }
-        }
+    
+    .bio-text {
+      max-width: 800px;
+      font-size: 1.1rem;
+    }
 
-        .container::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                linear-gradient(
-                    to bottom right,
-                    transparent 45%,
-                    var(--hologram-blue) 50%,
-                    transparent 55%
-                );
-            transform: rotate(30deg);
-            opacity: 0.1;
-            animation: scan 8s linear infinite;
-        }
+    .bio-line {
+      display: block;
+      margin-bottom: 10px;
+    }
 
-        @keyframes scan {
-            0% { transform: translateY(-100%) rotate(30deg); }
-            100% { transform: translateY(100%) rotate(30deg); }
-        }
+    
+    .enter-btn {
+      background-color: transparent;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 12px 40px;
+      margin-top: 30px;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
+    .enter-btn:hover {
+      background-color: rgba(0, 255, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, var(--hologram-blue), var(--hologram-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+    
+    .console {
+      width: 100%;
+      height: 100vh;
+      padding: 0;
+      box-sizing: border-box;
+      display: none;
+      position: relative;
+    }
 
-        .header p {
-            color: var(--hologram-blue);
-            font-size: 1rem;
-            opacity: 0.8;
-        }
+    
+    .console-header {
+      height: 30px;
+      background-color: #001500;
+      border-bottom: 1px solid #0a0;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 0.9rem;
+    }
 
-        .password-display {
-            position: relative;
-            margin-bottom: 30px;
-        }
+    
+    textarea {
+      background-color: #000;
+      color: #0f0;
+      border: none;
+      width: 100%;
+      height: calc(100% - 30px);
+      resize: none;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      outline: none;
+      padding: 10px;
+      box-sizing: border-box;
+    }
 
-        .password-field {
-            width: 100%;
-            padding: 20px;
-            font-size: 1.3rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--hologram-blue);
-            border-radius: 10px;
-            color: white;
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
-            transition: var(--transition);
-            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
-        }
+    
+    @keyframes scanline {
+      0% {
+        transform: translateY(-100%);
+      }
+      100% {
+        transform: translateY(100%);
+      }
+    }
 
-        .password-field:focus {
-            border-color: var(--hologram-pink);
-            box-shadow: 
-                inset 0 0 15px rgba(255, 0, 255, 0.3),
-                    0 0 20px rgba(255, 0, 255, 0.2);
-        }
-
-        .copy-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 255, 255, 0.1);
-            color: var(--hologram-blue);
-            border: 1px solid var(--hologram-blue);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .copy-btn:hover {
-            background: rgba(0, 255, 255, 0.2);
-            box-shadow: var(--glow-effect);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .strength-indicator {
-            margin-bottom: 30px;
-        }
-
-        .strength-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .strength-label {
-            font-size: 1rem;
-            color: var(--hologram-blue);
-        }
-
-        .strength-value {
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .strength-bar {
-            height: 8px;
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .strength-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: 4px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .strength-fill::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                to right,
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            animation: shine 2s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .settings {
-            margin-bottom: 30px;
-        }
-
-        .setting {
-            margin-bottom: 25px;
-        }
-
-        .setting-title {
-            display: block;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            color: var(--hologram-blue);
-        }
-
-        .length-control {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .length-value {
-            min-width: 40px;
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--hologram-pink);
-        }
-
-        .length-slider {
-            flex-grow: 1;
-            -webkit-appearance: none;
-            height: 6px;
-            background: rgba(0, 255, 255, 0.1);
-            border-radius: 3px;
-            outline: none;
-        }
-
-        .length-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: var(--hologram-blue);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--glow-effect);
-        }
-
-        .length-slider::-webkit-slider-thumb:hover {
-            background: var(--hologram-pink);
-            transform: scale(1.2);
-        }
-
-        .character-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--hologram-blue);
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-
-        .option:hover {
-            border-color: var(--hologram-pink);
-            box-shadow: var(--glow-effect);
-            transform: translateY(-3px);
-        }
-
-        .option input {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--hologram-blue);
-            cursor: pointer;
-        }
-
-        .option label {
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-
-        .generate-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(
-                to right,
-                var(--hologram-blue),
-                var(--hologram-purple)
-            );
-            color: black;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .generate-btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to right,
-                var(--hologram-pink),
-                var(--hologram-blue)
-            );
-            opacity: 0;
-            transition: var(--transition);
-            z-index: -1;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 5px 20px var(--hologram-blue),
-                0 5px 30px var(--hologram-purple);
-        }
-
-        .generate-btn:hover::before {
-            opacity: 1;
-        }
-
-        .notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: rgba(10, 10, 30, 0.9);
-            border: 1px solid var(--hologram-blue);
-            color: var(--hologram-blue);
-            padding: 15px 25px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateX(150%);
-            transition: var(--transition);
-            z-index: 100;
-            backdrop-filter: blur(5px);
-            box-shadow: var(--glow-effect);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                opacity: 1;
-            }
-            20%, 22%, 24%, 55% {
-                opacity: 0.5;
-            }
-        }
-
-        .flicker {
-            animation: flicker 3s infinite;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: var(--hologram-blue);
-            opacity: 0.7;
-        }
-    </style>
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: rgba(0, 255, 0, 0.3);
+      opacity: 0.3;
+      z-index: 999;
+      pointer-events: none;
+      animation: scanline 8s linear infinite;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="flicker">HOLO-PASS</h1>
-            <p>QUANTUM PASSWORD GENERATOR</p>
-        </div>
+  
+  <div class="scanline"></div>
 
-        <div class="password-display">
-            <input type="text" class="password-field" id="password" readonly placeholder="GENERATING...">
-            <button class="copy-btn" id="copy-btn" title="Copy to clipboard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-            </button>
-        </div>
-
-        <div class="strength-indicator">
-            <div class="strength-header">
-                <span class="strength-label">SECURITY LEVEL</span>
-                <span class="strength-value" id="strength-text">—</span>
-            </div>
-            <div class="strength-bar">
-                <div class="strength-fill" id="strength-fill"></div>
-            </div>
-        </div>
-
-        <div class="settings">
-            <div class="setting">
-                <label class="setting-title">PASSWORD LENGTH: <span id="length-value">16</span></label>
-                <div class="length-control">
-                    <input type="range" class="length-slider" id="length" min="4" max="64" value="16">
-                </div>
-            </div>
-
-            <div class="setting">
-                <label class="setting-title">CHARACTER SETTINGS</label>
-                <div class="character-options">
-                    <div class="option">
-                        <input type="checkbox" id="uppercase" checked>
-                        <label for="uppercase">UPPERCASE (A-Z)</label>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="lowercase" checked>
-                        <label for="lowercase">lowercase (a-z)</label>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="numbers" checked>
-                        <label for="numbers">Numbers (0-9)</label>
-                    </div>
-                    <div class="option">
-                        <input type="checkbox" id="symbols" checked>
-                        <label for="symbols">!@#$ Symbols</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button class="generate-btn" id="generate">
-            GENERATE SECURE KEY
-        </button>
-
-        <div class="footer">
-            <p>PASSWORDS NEVER LEAVE YOUR DEVICE • ENCRYPTED LOCALLY</p>
-        </div>
+  
+  <div class="overlay" id="overlay">
+    <div class="title">
+      <h1>0x7F</h1>
+      <h2>GHOST IN THE SHELL</h2>
     </div>
-
-    <div class="notification" id="notification">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        COPIED TO CLIPBOARD!
+    
+    <div class="bio-container">
+      <div class="bio-text">
+        <span class="bio-line">🕶️ Code is my blade — silence is my syntax.</span>
+        <span class="bio-line">🧠 I rewrite reality, one buffer overflow at a time.</span>
+        <span class="bio-line">🐚 Born in the shell, forged by zero-days.</span>
+        <span class="bio-line">👁️‍🗨️ UIs lie. Logs betray. Packets never do.</span>
+        <span class="bio-line">💣 I don't hack systems — I unmake illusions.</span>
+        <span class="bio-line">🌌 Between root and void lies [0x7F] — the threshold of control.</span>
+        <span class="bio-line">🕵️‍♂️ You search logs. I edit memory.</span>
+        <span class="bio-line">🧬 I don't chase access — I am the access.</span>
+        <span class="bio-line">💀 Ethics hardcoded. Fear deleted. Trace = NULL.</span>
+        <span class="bio-line">⚠️ If I'm visible, it's because I chose to be.</span>
+      </div>
+      
+      <button class="enter-btn" onclick="enterConsole()">ENTER</button>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const passwordField = document.getElementById('password');
-            const generateBtn = document.getElementById('generate');
-            const copyBtn = document.getElementById('copy-btn');
-            const lengthSlider = document.getElementById('length');
-            const lengthValue = document.getElementById('length-value');
-            const uppercaseCheckbox = document.getElementById('uppercase');
-            const lowercaseCheckbox = document.getElementById('lowercase');
-            const numbersCheckbox = document.getElementById('numbers');
-            const symbolsCheckbox = document.getElementById('symbols');
-            const strengthFill = document.getElementById('strength-fill');
-            const strengthText = document.getElementById('strength-text');
-            const notification = document.getElementById('notification');
+ 
+  <div class="console" id="console">
+    <div class="console-header">0x7F TERMINAL [root@ghost:~]</div>
+    <textarea autofocus spellcheck="false" id="terminal" placeholder="[0x7F:~]$ "></textarea>
+  </div>
 
-            // Character sets
-            const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-            const numberChars = '0123456789';
-            const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-            // Update length value display
-            lengthSlider.addEventListener('input', function() {
-                lengthValue.textContent = this.value;
-            });
-
-            // Generate password
-            function generatePassword() {
-                const length = lengthSlider.value;
-                const includeUppercase = uppercaseCheckbox.checked;
-                const includeLowercase = lowercaseCheckbox.checked;
-                const includeNumbers = numbersCheckbox.checked;
-                const includeSymbols = symbolsCheckbox.checked;
-                
-                let chars = '';
-                if (includeUppercase) chars += uppercaseChars;
-                if (includeLowercase) chars += lowercaseChars;
-                if (includeNumbers) chars += numberChars;
-                if (includeSymbols) chars += symbolChars;
-                
-                if (!chars) {
-                    showNotification('SELECT AT LEAST ONE CHARACTER TYPE!', 'error');
-                    return '';
-                }
-                
-                let password = '';
-                const crypto = window.crypto || window.msCrypto;
-                const values = new Uint32Array(length);
-                
-                if (crypto && crypto.getRandomValues) {
-                    crypto.getRandomValues(values);
-                    for (let i = 0; i < length; i++) {
-                        password += chars[values[i] % chars.length];
-                    }
-                } else {
-                    for (let i = 0; i < length; i++) {
-                        const randomIndex = Math.floor(Math.random() * chars.length);
-                        password += chars[randomIndex];
-                    }
-                }
-                
-                return password;
-            }
-
-            // Update password strength
-            function updateStrengthMeter(password) {
-                if (!password) {
-                    strengthFill.style.width = '0%';
-                    strengthText.textContent = '—';
-                    return;
-                }
-
-                let strength = 0;
-                const length = password.length;
-                
-                // Length contributes up to 50% of strength
-                strength += Math.min(length / 64 * 50, 50);
-                
-                // Character variety contributes the remaining 50%
-                let varietyScore = 0;
-                if (password.match(/[A-Z]/)) varietyScore += 10;
-                if (password.match(/[a-z]/)) varietyScore += 10;
-                if (password.match(/[0-9]/)) varietyScore += 10;
-                if (password.match(/[^A-Za-z0-9]/)) varietyScore += 20;
-                
-                strength += varietyScore;
-                
-                // Update the strength bar and text
-                strengthFill.style.width = strength + '%';
-                
-                if (strength < 40) {
-                    strengthFill.style.background = '#ff2a6d';
-                    strengthText.textContent = 'WEAK';
-                } else if (strength < 70) {
-                    strengthFill.style.background = '#ffcc00';
-                    strengthText.textContent = 'MEDIUM';
-                } else if (strength < 90) {
-                    strengthFill.style.background = 'var(--hologram-blue)';
-                    strengthText.textContent = 'STRONG';
-                } else {
-                    strengthFill.style.background = 'var(--hologram-pink)';
-                    strengthText.textContent = 'UNBREAKABLE';
-                }
-            }
-
-            // Show notification
-            function showNotification(message, type = 'success') {
-                const notification = document.getElementById('notification');
-                notification.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        ${type === 'error' ? 
-                            '<path d="M18 6L6 18M6 6l12 12"></path>' : 
-                            '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'}
-                    </svg>
-                    ${message}
-                `;
-                
-                notification.style.borderColor = type === 'error' ? '#ff2a6d' : 'var(--hologram-blue)';
-                notification.style.boxShadow = type === 'error' ? 
-                    '0 0 15px #ff2a6d' : '0 0 15px var(--hologram-blue)';
-                
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-
-            // Copy password to clipboard
-            copyBtn.addEventListener('click', function() {
-                if (!passwordField.value) return;
-                
-                passwordField.select();
-                document.execCommand('copy');
-                
-                showNotification('COPIED TO CLIPBOARD!');
-            });
-
-            // Generate button click handler
-            generateBtn.addEventListener('click', function() {
-                const password = generatePassword();
-                if (password) {
-                    passwordField.value = password;
-                    updateStrengthMeter(password);
-                    
-                    // Add visual feedback
-                    passwordField.style.animation = 'none';
-                    void passwordField.offsetWidth; // Trigger reflow
-                    passwordField.style.animation = 'flicker 0.5s';
-                }
-            });
-
-            // Generate initial password
-            generateBtn.click();
-        });
-    </script>
+  <script>
+    
+    function enterConsole() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('console').style.display = 'block';
+      document.getElementById('terminal').focus();
+      
+      
+      const terminal = document.getElementById('terminal');
+      terminal.value = '[0x7F:~]$ ';
+      
+      
+      terminal.selectionStart = terminal.value.length;
+      terminal.selectionEnd = terminal.value.length;
+    }
+  </script>
 </body>
 </html>
