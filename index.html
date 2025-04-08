@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>0x7F | Ghost in the Shell</title>
   <style>
-   
     body {
       margin: 0;
       padding: 0;
@@ -16,7 +15,6 @@
       overflow: hidden;
     }
 
-   
     .overlay {
       position: fixed;
       top: 0;
@@ -31,7 +29,6 @@
       z-index: 10;
     }
 
-    
     .title {
       text-align: center;
       margin-bottom: 30px;
@@ -51,7 +48,6 @@
       opacity: 0.8;
     }
 
-  
     .bio-container {
       max-width: 800px;
       border: 1px solid #0a0;
@@ -61,7 +57,6 @@
       margin: 0 20px;
     }
 
-    
     .bio-text {
       max-width: 800px;
       font-size: 1.1rem;
@@ -72,7 +67,6 @@
       margin-bottom: 10px;
     }
 
-    
     .enter-btn {
       background-color: transparent;
       color: #0f0;
@@ -90,17 +84,16 @@
       box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
     }
 
-    
     .console {
       width: 100%;
       height: 100vh;
-      padding: 0;
       box-sizing: border-box;
       display: none;
       position: relative;
+      background-color: #000;
+      overflow: hidden;
     }
 
-    
     .console-header {
       height: 30px;
       background-color: #001500;
@@ -111,22 +104,42 @@
       font-size: 0.9rem;
     }
 
-    
-    textarea {
-      background-color: #000;
+    #terminal-output {
+      height: calc(100% - 60px);
+      padding: 10px;
+      margin: 0;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
       color: #0f0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .input-line {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      border-top: 1px solid #0a0;
+      background-color: #000;
+    }
+
+    .prompt {
+      color: #0f0;
+      margin-right: 8px;
+    }
+
+    #cmd-input {
+      flex: 1;
+      background: transparent;
       border: none;
-      width: 100%;
-      height: calc(100% - 30px);
-      resize: none;
+      color: #0f0;
       font-family: 'Courier New', monospace;
       font-size: 1rem;
       outline: none;
-      padding: 10px;
-      box-sizing: border-box;
     }
 
-    
     @keyframes scanline {
       0% {
         transform: translateY(-100%);
@@ -148,14 +161,75 @@
       pointer-events: none;
       animation: scanline 8s linear infinite;
     }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background-color: #0f0;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+
+    .matrix-char {
+      position: absolute;
+      color: #0f0;
+      font-family: monospace;
+      font-size: 10px;
+      opacity: 0;
+      z-index: -1;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+    }
+
+    .error-text {
+      color: #f55;
+      text-shadow: 0 0 5px #f00;
+    }
+
+    .success-text {
+      color: #5f5;
+      text-shadow: 0 0 5px #0f0;
+    }
+
+    .warning-text {
+      color: #ff5;
+      text-shadow: 0 0 5px #ff0;
+    }
+
+    .info-text {
+      color: #5ff;
+      text-shadow: 0 0 5px #0ff;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background-color: #0f0;
+      width: 0%;
+      transition: width 0.5s linear;
+      margin: 5px 0;
+    }
+
+    .ascii-art {
+      white-space: pre;
+      font-size: 0.7em;
+      line-height: 1.2;
+      display: inline-block;
+      margin: 10px 0;
+    }
   </style>
 </head>
 
 <body>
-  
   <div class="scanline"></div>
 
-  
   <div class="overlay" id="overlay">
     <div class="title">
       <h1>0x7F</h1>
@@ -180,27 +254,486 @@
     </div>
   </div>
 
- 
   <div class="console" id="console">
     <div class="console-header">0x7F TERMINAL [root@ghost:~]</div>
-    <textarea autofocus spellcheck="false" id="terminal" placeholder="[0x7F:~]$ "></textarea>
+    <div id="terminal-output"></div>
+    <div class="input-line">
+      <span class="prompt">[0x7F:~]$</span>
+      <input type="text" id="cmd-input" autofocus spellcheck="false">
+    </div>
   </div>
 
   <script>
+    let commandHistory = [];
+    let historyIndex = -1;
+    let matrixInterval;
+    let lastCommand = '';
+    let systems = {
+      firewall: false,
+      proxy: false,
+      encryption: false,
+      vpn: false
+    };
     
     function enterConsole() {
       document.getElementById('overlay').style.display = 'none';
       document.getElementById('console').style.display = 'block';
-      document.getElementById('terminal').focus();
+      document.getElementById('cmd-input').focus();
       
+      startMatrix();
       
-      const terminal = document.getElementById('terminal');
-      terminal.value = '[0x7F:~]$ ';
-      
-      
-      terminal.selectionStart = terminal.value.length;
-      terminal.selectionEnd = terminal.value.length;
+      printWelcome();
     }
+    
+    function startMatrix() {
+      let count = 100;
+      let container = document.getElementById('console');
+      
+      for (let i = 0; i < count; i++) {
+        let char = document.createElement('div');
+        char.className = 'matrix-char';
+        char.style.left = Math.random() * 100 + '%';
+        char.style.top = Math.random() * 100 + '%';
+        char.textContent = String.fromCharCode(0x30A0 + Math.random() * 96);
+        container.appendChild(char);
+        
+        animateMatrixChar(char);
+      }
+    }
+    
+    function animateMatrixChar(char) {
+      let duration = 2000 + Math.random() * 8000;
+      char.style.transition = `opacity ${duration/1000}s ease-in-out`;
+      
+      setTimeout(() => {
+        char.style.opacity = '0.3';
+        
+        setTimeout(() => {
+          char.style.opacity = '0';
+          char.textContent = String.fromCharCode(0x30A0 + Math.random() * 96);
+          char.style.left = Math.random() * 100 + '%';
+          char.style.top = Math.random() * 100 + '%';
+          
+          animateMatrixChar(char);
+        }, duration);
+      }, Math.random() * 2000);
+    }
+    
+    function printWelcome() {
+      typeText('Initializing 0x7F secure terminal...\n', 30)
+        .then(() => wait(500))
+        .then(() => printProgressBar(50))
+        .then(() => wait(300))
+        .then(() => typeText('System loaded. Welcome, Ghost.\n', 30))
+        .then(() => wait(500))
+        .then(() => typeText('Type "help" for available commands.\n\n', 30));
+    }
+    
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    function printProgressBar(steps) {
+      return new Promise(resolve => {
+        const output = document.getElementById('terminal-output');
+        const bar = document.createElement('div');
+        bar.className = 'progress-bar';
+        output.appendChild(bar);
+        
+        let width = 0;
+        const increment = 100 / steps;
+        
+        const timer = setInterval(() => {
+          width += increment;
+          bar.style.width = width + '%';
+          
+          if (width >= 100) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, 50);
+      });
+    }
+    
+    function typeText(text, speed = 50) {
+      return new Promise(resolve => {
+        const output = document.getElementById('terminal-output');
+        let index = 0;
+        
+        function addChar() {
+          if (index < text.length) {
+            output.textContent += text.charAt(index);
+            output.scrollTop = output.scrollHeight;
+            index++;
+            setTimeout(addChar, Math.random() * speed);
+          } else {
+            resolve();
+          }
+        }
+        
+        addChar();
+      });
+    }
+    
+    function print(text, className = '') {
+      const output = document.getElementById('terminal-output');
+      const span = document.createElement('span');
+      span.className = className;
+      span.textContent = text;
+      output.appendChild(span);
+      output.appendChild(document.createTextNode('\n'));
+      output.scrollTop = output.scrollHeight;
+    }
+    
+    function printWithDelay(text, delay = 1000, className = '') {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          print(text, className);
+          resolve();
+        }, delay);
+      });
+    }
+    
+    function executeCommand(cmd) {
+      const output = document.getElementById('terminal-output');
+      output.textContent += `[0x7F:~]$ ${cmd}\n`;
+      
+      if (cmd.trim() === '') return;
+      
+      commandHistory.unshift(cmd);
+      historyIndex = -1;
+      
+      const command = cmd.trim().toLowerCase();
+      const args = command.split(' ');
+      
+      switch(args[0]) {
+        case 'help':
+          displayHelp();
+          break;
+        case 'clear':
+          clearTerminal();
+          break;
+        case 'matrix':
+          runMatrixEffect();
+          break;
+        case 'hack':
+          hackSystem(args[1]);
+          break;
+        case 'scan':
+          scanNetwork();
+          break;
+        case 'status':
+          showStatus();
+          break;
+        case 'activate':
+          activateSystem(args[1]);
+          break;
+        case 'deactivate':
+          deactivateSystem(args[1]);
+          break;
+        case 'skull':
+          showSkull();
+          break;
+        case 'decrypt':
+          decryptFile(args[1]);
+          break;
+        case 'connect':
+          connectTo(args[1]);
+          break;
+        case 'ls':
+          listFiles();
+          break;
+        case 'cat':
+          catFile(args[1]);
+          break;
+        case 'echo':
+          echoText(args.slice(1).join(' '));
+          break;
+        default:
+          print(`Command not found: ${args[0]}`, 'error-text');
+      }
+      
+      output.scrollTop = output.scrollHeight;
+    }
+    
+    function displayHelp() {
+      print('Available commands:');
+      print('  help        - Display this help message');
+      print('  clear       - Clear the terminal');
+      print('  matrix      - Display the matrix effect');
+      print('  scan        - Scan for network vulnerabilities');
+      print('  hack [target] - Attempt to hack a target');
+      print('  status      - Show system status');
+      print('  activate [system] - Activate a security system');
+      print('  deactivate [system] - Deactivate a security system');
+      print('  skull       - Display hacker emblem');
+      print('  decrypt [file] - Decrypt a file');
+      print('  connect [ip] - Connect to remote system');
+      print('  ls          - List files');
+      print('  cat [file]  - Display file contents');
+      print('  echo [text] - Print text to the terminal');
+    }
+    
+    function clearTerminal() {
+      document.getElementById('terminal-output').textContent = '';
+    }
+    
+    function runMatrixEffect() {
+      print('Initializing Matrix sequence...', 'glow-text');
+      
+      const chars = '01'.split('');
+      const rainLength = 20;
+      const output = document.getElementById('terminal-output');
+      
+      for (let i = 0; i < rainLength; i++) {
+        setTimeout(() => {
+          let line = '';
+          for (let j = 0; j < 50; j++) {
+            line += chars[Math.floor(Math.random() * chars.length)];
+          }
+          print(line, 'glow-text');
+          output.scrollTop = output.scrollHeight;
+        }, i * 100);
+      }
+    }
+    
+    function scanNetwork() {
+      print('Initiating network scan...', 'info-text');
+      
+      printProgressBar(20)
+        .then(() => printWithDelay('Scanning port range: 1-1024...', 500, 'info-text'))
+        .then(() => printProgressBar(15))
+        .then(() => printWithDelay('Enumerating services...', 500, 'info-text'))
+        .then(() => printProgressBar(10))
+        .then(() => printWithDelay('Checking for vulnerabilities...', 500, 'info-text'))
+        .then(() => {
+          print('\nScan complete. Results:', 'success-text');
+          print('IP: 192.168.1.1 - Router - Open ports: 22, 80, 443');
+          print('IP: 192.168.1.5 - Server - Open ports: 21, 22, 80, 3306');
+          print('IP: 192.168.1.10 - Workstation - Open ports: 445, 3389');
+          print('IP: 192.168.1.15 - IoT Device - Open ports: 23, 80, 8080 [VULNERABLE]');
+        });
+    }
+    
+    function hackSystem(target) {
+      if (!target) {
+        print('Specify a target to hack.', 'error-text');
+        return;
+      }
+      
+      print(`Initiating hack on ${target}...`, 'warning-text');
+      
+      printProgressBar(30)
+        .then(() => printWithDelay('Bypassing firewall...', 500, 'warning-text'))
+        .then(() => printProgressBar(20))
+        .then(() => printWithDelay('Exploiting vulnerabilities...', 700, 'warning-text'))
+        .then(() => printProgressBar(25))
+        .then(() => printWithDelay('Establishing backdoor...', 600, 'warning-text'))
+        .then(() => printProgressBar(15))
+        .then(() => {
+          const success = Math.random() > 0.3;
+          if (success) {
+            print(`\nHack successful! Access granted to ${target}`, 'success-text');
+            print('Credentials obtained:');
+            print('Username: admin');
+            print('Password: ********** [encrypted]');
+          } else {
+            print(`\nHack failed! ${target} has detected the intrusion.`, 'error-text');
+            print('Trace initiated. Terminating connection...', 'error-text');
+          }
+        });
+    }
+    
+    function showStatus() {
+      print('SYSTEM STATUS:', 'glow-text');
+      print(`Firewall: ${systems.firewall ? 'ACTIVE' : 'INACTIVE'}`);
+      print(`VPN: ${systems.vpn ? 'ACTIVE' : 'INACTIVE'}`);
+      print(`Proxy: ${systems.proxy ? 'ACTIVE' : 'INACTIVE'}`);
+      print(`Encryption: ${systems.encryption ? 'ACTIVE' : 'INACTIVE'}`);
+      print('\nSystem Integrity: 98.7%');
+      print('Memory Usage: 42.3%');
+      print('Uptime: 3d 7h 22m');
+      print('Active Connections: 3');
+      print('Threat Level: LOW');
+    }
+    
+    function activateSystem(system) {
+      if (!system) {
+        print('Specify a system to activate: firewall, vpn, proxy, encryption', 'error-text');
+        return;
+      }
+      
+      if (systems.hasOwnProperty(system)) {
+        print(`Activating ${system}...`, 'info-text');
+        
+        printProgressBar(10)
+          .then(() => {
+            systems[system] = true;
+            print(`${system.toUpperCase()} now ACTIVE`, 'success-text');
+          });
+      } else {
+        print(`Unknown system: ${system}`, 'error-text');
+      }
+    }
+    
+    function deactivateSystem(system) {
+      if (!system) {
+        print('Specify a system to deactivate: firewall, vpn, proxy, encryption', 'error-text');
+        return;
+      }
+      
+      if (systems.hasOwnProperty(system)) {
+        print(`Deactivating ${system}...`, 'info-text');
+        
+        printProgressBar(10)
+          .then(() => {
+            systems[system] = false;
+            print(`${system.toUpperCase()} now INACTIVE`, 'warning-text');
+          });
+      } else {
+        print(`Unknown system: ${system}`, 'error-text');
+      }
+    }
+    
+    function showSkull() {
+      const skull = `
+      .-.
+     (o.o)
+      |=|
+     __|__
+    //.=|=.\\\\
+   // .=|=. \\\\
+   \\\\ .=|=. //
+    \\\\(_=_)//
+     (:| |:)
+      || ||
+      () ()
+      || ||
+      || ||
+     ==' '==
+      `;
+      
+      print(skull, 'ascii-art');
+      print('DIGITAL PHANTOM ACTIVATED', 'glow-text');
+    }
+    
+    function decryptFile(file) {
+      if (!file) {
+        print('Specify a file to decrypt.', 'error-text');
+        return;
+      }
+      
+      print(`Attempting to decrypt ${file}...`, 'info-text');
+      
+      printProgressBar(40)
+        .then(() => printWithDelay('Analyzing encryption...', 500, 'info-text'))
+        .then(() => printProgressBar(30))
+        .then(() => printWithDelay('Applying decryption algorithm...', 700, 'info-text'))
+        .then(() => printProgressBar(25))
+        .then(() => {
+          const files = {
+            'secret.txt': 'The password to the main server is: Gh0st1nTh3Sh3ll',
+            'contacts.dat': 'Contact list encrypted with secondary key. Requires additional decryption.',
+            'blueprint.pdf': 'Building schematics for Project X retrieved. Coordinates: 35.6895° N, 139.6917° E'
+          };
+          
+          if (files[file]) {
+            print('\nDecryption successful!', 'success-text');
+            print(`Contents of ${file}:`, 'info-text');
+            print(files[file]);
+          } else {
+            print(`\nFile not found: ${file}`, 'error-text');
+          }
+        });
+    }
+    
+    function connectTo(address) {
+      if (!address) {
+        print('Specify an IP address to connect to.', 'error-text');
+        return;
+      }
+      
+      print(`Establishing secure connection to ${address}...`, 'info-text');
+      
+      printProgressBar(15)
+        .then(() => printWithDelay('Routing through proxies...', 500, 'info-text'))
+        .then(() => printProgressBar(10))
+        .then(() => printWithDelay('Establishing encrypted tunnel...', 600, 'info-text'))
+        .then(() => printProgressBar(10))
+        .then(() => {
+          if (address === '192.168.1.15') {
+            print('\nConnection established to vulnerable IoT device!', 'success-text');
+            print('Access level: Root', 'success-text');
+            print('Type "help" for available commands on this system.');
+          } else {
+            print('\nConnection established.', 'success-text');
+            print('Access level: Guest', 'warning-text');
+            print('Limited permissions available on this system.');
+          }
+        });
+    }
+    
+    function listFiles() {
+      print('Directory listing:');
+      print('drwxr-xr-x  root   root    4096 Apr 09 12:34 .config/');
+      print('drwxr-xr-x  root   root    4096 Apr 08 09:12 .ssh/');
+      print('-rw-------  root   root    2048 Apr 09 10:24 secret.txt');
+      print('-rw-r--r--  root   root   15360 Apr 07 22:15 contacts.dat');
+      print('-rw-r--r--  root   root  524288 Apr 06 14:08 blueprint.pdf');
+      print('-rwxr-xr-x  root   root   12345 Apr 05 16:42 exploit');
+      print('-rw-r--r--  root   root     368 Apr 02 08:17 readme.md');
+    }
+    
+    function catFile(file) {
+      if (!file) {
+        print('Specify a file to display.', 'error-text');
+        return;
+      }
+      
+      const files = {
+        'readme.md': '# Ghost Shell Project\n\nThis is a secure shell environment for cybersecurity operations.\nUse with caution.\n\nVersion: 2.5.9\nAuthor: 0x7F',
+        'secret.txt': '**ENCRYPTED**\nUse "decrypt secret.txt" to view contents.',
+        'contacts.dat': '**ENCRYPTED BINARY DATA**\nUse "decrypt contacts.dat" to attempt decryption.'
+      };
+      
+      if (files[file]) {
+        print(`Contents of ${file}:`);
+        print(files[file]);
+      } else {
+        print(`File not found: ${file}`, 'error-text');
+      }
+    }
+    
+    function echoText(text) {
+      print(text);
+    }
+    
+    document.getElementById('cmd-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const cmd = this.value;
+        executeCommand(cmd);
+        this.value = '';
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (commandHistory.length > 0) {
+          historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+          this.value = commandHistory[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          this.value = commandHistory[historyIndex];
+        } else if (historyIndex === 0) {
+          historyIndex = -1;
+          this.value = '';
+        }
+      }
+    });
+    
+    document.addEventListener('click', function() {
+      document.getElementById('cmd-input').focus();
+    });
   </script>
 </body>
 </html>
