@@ -449,6 +449,21 @@
         case 'echo':
           echoText(args.slice(1).join(' '));
           break;
+        case 'traceroute':
+          traceroute(args[1]);
+          break;
+        case 'brute':
+          brute(args[1]);
+          break;
+        case 'exfiltrate':
+          exfiltrate(args[1]);
+          break;
+        case 'backdoor':
+          backdoor(args[1]);
+          break;
+        case 'analyze':
+          analyze(args[1]);
+          break;
         default:
           print(`Command not found: ${args[0]}`, 'error-text');
       }
@@ -472,6 +487,11 @@
       print('  ls          - List files');
       print('  cat [file]  - Display file contents');
       print('  echo [text] - Print text to the terminal');
+      print('  traceroute [destination] - Trace network path to target');
+      print('  brute [target] - Perform brute force password attack');
+      print('  exfiltrate [file] - Securely extract files from system');
+      print('  backdoor [target] - Install persistent remote access');
+      print('  analyze [target] - Perform deep security analysis');
     }
     
     function clearTerminal() {
@@ -708,19 +728,195 @@
       print(text);
     }
     
+    function traceroute(target) {
+      if (!target) {
+        print('Specify a target for traceroute.', 'error-text');
+        return;
+      }
+      
+      print(`Initiating traceroute to ${target}...`, 'info-text');
+      
+      const hops = [
+        { hop: 1, ip: '192.168.1.1', time: '1.2 ms', status: 'success' },
+        { hop: 2, ip: '10.0.0.1', time: '5.7 ms', status: 'success' },
+        { hop: 3, ip: '172.16.0.1', time: '12.3 ms', status: 'success' },
+        { hop: 4, ip: '***.***.***.**', time: '??', status: 'blocked' },
+        { hop: 5, ip: '***.***.***.**', time: '??', status: 'blocked' },
+        { hop: 6, ip: '144.22.84.15', time: '29.8 ms', status: 'success' },
+        { hop: 7, ip: '195.114.207.22', time: '35.1 ms', status: 'success' },
+        { hop: 8, ip: target, time: '40.5 ms', status: 'success' }
+      ];
+      
+      let hopIndex = 0;
+      
+      function showNextHop() {
+        if (hopIndex < hops.length) {
+          const hop = hops[hopIndex];
+          const className = hop.status === 'success' ? 'info-text' : 'warning-text';
+          print(`Hop ${hop.hop}: ${hop.ip} - ${hop.time}`, className);
+          hopIndex++;
+          setTimeout(showNextHop, 300);
+        } else {
+          print(`\nTraceroute to ${target} complete.`, 'success-text');
+        }
+      }
+      
+      setTimeout(showNextHop, 500);
+    }
+    
+    function brute(target) {
+      if (!target) {
+        print('Specify a target for brute force.', 'error-text');
+        return;
+      }
+      
+      print(`Initiating brute force attack on ${target}...`, 'warning-text');
+      print('Generating password combinations...', 'info-text');
+      
+      printProgressBar(15)
+        .then(() => printWithDelay('Testing common passwords...', 400, 'info-text'))
+        .then(() => printProgressBar(20))
+        .then(() => printWithDelay('Testing dictionary words...', 500, 'info-text'))
+        .then(() => printProgressBar(30))
+        .then(() => printWithDelay('Testing alphanumeric combinations...', 600, 'info-text'))
+        .then(() => printProgressBar(25))
+        .then(() => {
+          const success = Math.random() > 0.4;
+          if (success) {
+            print('\nBrute force attack successful!', 'success-text');
+            print(`Access to ${target} granted.`, 'success-text');
+            print('Credentials:');
+            
+            // Generate random-looking password
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+            let password = '';
+            for (let i = 0; i < 10; i++) {
+              password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            print(`Username: admin`);
+            print(`Password: ${password}`);
+          } else {
+            print('\nBrute force attack failed.', 'error-text');
+            print('Target has lockout mechanism or strong password policy.', 'error-text');
+            print('Suggestion: Try a different approach.', 'info-text');
+          }
+        });
+    }
+    
+    function exfiltrate(targetFile) {
+      if (!targetFile) {
+        print('Specify a target file to exfiltrate.', 'error-text');
+        return;
+      }
+      
+      const validFiles = ['customer_data.db', 'financial_records.xlsx', 'employee_records.csv', 'server_logs.txt', 'source_code.zip'];
+      
+      if (!validFiles.includes(targetFile)) {
+        print(`File not found: ${targetFile}`, 'error-text');
+        print('Available files for exfiltration:', 'info-text');
+        validFiles.forEach(file => print(`  ${file}`));
+        return;
+      }
+      
+      print(`Preparing to exfiltrate ${targetFile}...`, 'warning-text');
+      
+      printProgressBar(10)
+        .then(() => printWithDelay('Compressing data...', 300, 'info-text'))
+        .then(() => printProgressBar(15))
+        .then(() => printWithDelay('Encrypting payload...', 400, 'info-text'))
+        .then(() => printProgressBar(20))
+        .then(() => printWithDelay('Establishing covert channel...', 500, 'info-text'))
+        .then(() => printProgressBar(25))
+        .then(() => {
+          const success = Math.random() > 0.2;
+          if (success) {
+            print('\nExfiltration successful!', 'success-text');
+            print(`File ${targetFile} transferred to secure location.`, 'success-text');
+            print('Cleanup complete. No traces left.', 'info-text');
+          } else {
+            print('\nExfiltration failed!', 'error-text');
+            print('Anomaly detected by security systems.', 'error-text');
+            print('Terminating connection and erasing traces...', 'warning-text');
+          }
+        });
+    }
+    
+    function backdoor(target) {
+      if (!target) {
+        print('Specify a target for backdoor installation.', 'error-text');
+        return;
+      }
+      
+      print(`Attempting to install persistent backdoor on ${target}...`, 'warning-text');
+      
+      printProgressBar(15)
+        .then(() => printWithDelay('Identifying vulnerabilities...', 400, 'info-text'))
+        .then(() => printProgressBar(20))
+        .then(() => printWithDelay('Uploading payload...', 500, 'info-text'))
+        .then(() => printProgressBar(25))
+        .then(() => printWithDelay('Configuring persistence...', 600, 'info-text'))
+        .then(() => printProgressBar(20))
+        .then(() => {
+          const success = Math.random() > 0.35;
+          if (success) {
+            print('\nBackdoor successfully installed!', 'success-text');
+            print(`Permanent access established to ${target}`, 'success-text');
+            print('Connection key: XK-'+Math.random().toString(36).substr(2, 16).toUpperCase(), 'info-text');
+          } else {
+            print('\nBackdoor installation failed!', 'error-text');
+            print('Target system detected the intrusion.', 'error-text');
+            print('Recommendation: Try different approach after 24h.', 'warning-text');
+          }
+        });
+    }
+    
+    function analyze(target) {
+      if (!target) {
+        print('Specify a target for analysis.', 'error-text');
+        return;
+      }
+      
+      print(`Initiating deep security analysis of ${target}...`, 'info-text');
+      
+      printProgressBar(20)
+        .then(() => printWithDelay('Scanning for vulnerabilities...', 500, 'info-text'))
+        .then(() => printProgressBar(25))
+        .then(() => printWithDelay('Analyzing network configuration...', 600, 'info-text'))
+        .then(() => printProgressBar(20))
+        .then(() => printWithDelay('Checking patch levels...', 400, 'info-text'))
+        .then(() => printProgressBar(15))
+        .then(() => printWithDelay('Evaluating security policies...', 500, 'info-text'))
+        .then(() => {
+          print('\nAnalysis complete. Security report:', 'success-text');
+          print(`Target: ${target}`);
+          print('Overall risk level: ' + (Math.random() > 0.7 ? 'HIGH' : 'MEDIUM'));
+          print('Critical vulnerabilities found: ' + Math.floor(Math.random() * 5));
+          print('Recommended actions:');
+          print('1. ' + ['Update system patches', 'Change default credentials', 
+                         'Restrict network access', 'Enable logging'][Math.floor(Math.random() * 4)]);
+          print('2. ' + ['Install WAF', 'Implement 2FA', 
+                         'Encrypt sensitive data', 'Disable unused services'][Math.floor(Math.random() * 4)]);
+        });
+    }
+
+    // Terminal input handling
     document.getElementById('cmd-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         const cmd = this.value;
         executeCommand(cmd);
         this.value = '';
+        lastCommand = cmd;
       } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (commandHistory.length > 0) {
-          historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+        if (historyIndex < commandHistory.length - 1) {
+          historyIndex++;
+          this.value = commandHistory[historyIndex];
+        } else if (commandHistory.length > 0 && historyIndex === -1) {
+          historyIndex = 0;
           this.value = commandHistory[historyIndex];
         }
-      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
+      } else if (e.key === 'ArrowDown') {
         if (historyIndex > 0) {
           historyIndex--;
           this.value = commandHistory[historyIndex];
@@ -728,12 +924,22 @@
           historyIndex = -1;
           this.value = '';
         }
+        e.preventDefault();
       }
     });
-    
-    document.addEventListener('click', function() {
-      document.getElementById('cmd-input').focus();
-    });
+
+    // Initialize with some matrix characters
+    window.onload = function() {
+      for (let i = 0; i < 20; i++) {
+        const char = document.createElement('div');
+        char.className = 'matrix-char';
+        char.style.left = Math.random() * 100 + '%';
+        char.style.top = Math.random() * 100 + '%';
+        char.textContent = String.fromCharCode(0x30A0 + Math.random() * 96);
+        char.style.opacity = '0.3';
+        document.body.appendChild(char);
+      }
+    };
   </script>
 </body>
 </html>
