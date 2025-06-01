@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FiveM Threat Scanner</title>
+    <!-- Basic Meta Tags -->
+    <meta name="description" content="Advanced malware detection and security analysis for FiveM resources. Scan your ZIP files for potential threats and backdoors.">
+    <meta name="keywords" content="FiveM, threat scanner, malware detection, security, backdoor, Lua, JavaScript">
+    <!-- Open Graph Meta Tags for Discord Embed -->
+    <meta property="og:title" content="FiveM Threat Scanner">
+    <meta property="og:description" content="Scan your FiveM resources for malware and backdoors with our advanced threat detection tool.">
+    <meta property="og:image" content="https://example.com/fivem-threat-scanner.png">
+    <meta property="og:url" content="https://example.com/fivem-threat-scanner">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="FiveM Threat Scanner">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FiveM Threat Scanner">
+    <meta name="twitter:description" content="Scan your FiveM resources for malware and backdoors with our advanced threat detection tool.">
+    <meta name="twitter:image" content="https://example.com/fivem-threat-scanner.png">
+    <!-- External Resources -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
@@ -717,6 +733,83 @@
                 opacity: 1;
             }
         }
+
+        /* Notification Styles */
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            min-width: 300px;
+            max-width: 400px;
+            background: linear-gradient(135deg, 
+                rgba(15, 15, 25, 0.9) 0%, 
+                rgba(30, 30, 46, 0.8) 100%
+            );
+            border: 1px solid var(--border-bright);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            box-shadow: 
+                0 10px 20px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 255, 136, 0.2);
+            z-index: 1000;
+            animation: toastSlideIn 0.5s ease-out, toastFadeOut 0.5s ease-in 4.5s forwards;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast-warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .toast-info {
+            border-left: 4px solid var(--cyber-blue);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .toast-close {
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .toast-close:hover {
+            color: var(--primary);
+        }
+
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toastFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1153,7 +1246,7 @@
                 const findings = [];
                 let fileCount = 0;
                 const files = Object.keys(zip.files).filter(f => 
-                    f.match(/\.(lua|js|txt|cfg)$/i) && !f.match(/fxmanifest\.lua$/i)
+                    f.match(/\.(lua|js|txt|cfg)$/i) && !f.match(/fxmanifest\.lua$/i) && !f.match(/__resource\.lua$/i)
                 );
 
                 if (files.length > 1000) {
@@ -1251,6 +1344,21 @@
             );
         };
 
+        const Toast = ({ id, message, type, onClose }) => {
+            return (
+                <div className={`toast toast-${type}`}>
+                    <span className="toast-icon">
+                        {type === 'success' && '✅'}
+                        {type === 'error' && '❌'}
+                        {type === 'warning' && '⚠️'}
+                        {type === 'info' && 'ℹ️'}
+                    </span>
+                    <span className="flex-1">{message}</span>
+                    <span className="toast-close" onClick={() => onClose(id)}>✕</span>
+                </div>
+            );
+        };
+
         const App = () => {
             const [file, setFile] = React.useState(null);
             const [status, setStatus] = React.useState('');
@@ -1261,21 +1369,38 @@
                 return 'scan-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
             });
             const [dragOver, setDragOver] = React.useState(false);
+            const [toasts, setToasts] = React.useState([]);
+
+            const addToast = (message, type) => {
+                const id = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                setToasts(prev => [...prev, { id, message, type }]);
+                setTimeout(() => {
+                    setToasts(prev => prev.filter(toast => toast.id !== id));
+                }, 5000);
+            };
+
+            const removeToast = (id) => {
+                setToasts(prev => prev.filter(toast => toast.id !== id));
+            };
 
             const handleFileChange = (selectedFile) => {
                 if (!selectedFile) {
+                    addToast('Please select a file.', 'warning');
                     setStatus('⚠️ Please select a file.');
                     return;
                 }
                 if (!selectedFile.name.match(/\.zip$/i)) {
+                    addToast('Invalid file. Please upload a ZIP file.', 'error');
                     setStatus('❌ Invalid file. Please upload a ZIP file.');
                     return;
                 }
                 if (selectedFile.size > 500 * 1024 * 1024) {
+                    addToast('File too large. Max 500MB.', 'error');
                     setStatus('❌ File too large. Max 500MB.');
                     return;
                 }
                 setFile(selectedFile);
+                addToast(`File Selected: ${selectedFile.name}`, 'success');
                 setStatus(`✅ File Selected: ${selectedFile.name}`);
                 setProgress(0);
                 setFindings([]);
@@ -1285,11 +1410,13 @@
 
             const handleScan = async () => {
                 if (!file) {
+                    addToast('Please select a file to scan.', 'warning');
                     setStatus('⚠️ Please select a file.');
                     return;
                 }
 
                 setProgress(20);
+                addToast('Extracting ZIP file...', 'info');
                 setStatus('🔍 Extracting ZIP...');
 
                 try {
@@ -1297,8 +1424,15 @@
                     setFindings(findings);
                     setFileCount(fileCount);
                     setProgress(100);
+                    addToast('Scan completed successfully!', 'success');
                     setStatus('✅ Scan Complete');
+                    if (findings.length === 0) {
+                        addToast('No threats found in the scanned ZIP file.', 'success');
+                    } else {
+                        addToast(`Found ${findings.length} potential threats!`, 'warning');
+                    }
                 } catch (error) {
+                    addToast(`Error: ${error.message}`, 'error');
                     setStatus(`❌ Error: ${error.message}`);
                     setProgress(0);
                     setFindings([]);
@@ -1331,7 +1465,19 @@
             };
 
             return (
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-6xl mx-auto relative">
+                    <div className="fixed top-0 right-0 space-y-2 z-50">
+                        {toasts.map(toast => (
+                            <Toast
+                                key={toast.id}
+                                id={toast.id}
+                                message={toast.message}
+                                type={toast.type}
+                                onClose={removeToast}
+                            />
+                        ))}
+                    </div>
+
                     <div className="text-center mb-12">
                         <h1 className="hero-title gradient-text fade-in">FiveM Threat Scanner</h1>
                         <p className="text-xl text-text-secondary max-w-2xl mx-auto">
