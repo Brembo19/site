@@ -7,6 +7,7 @@
     <!-- Basic Meta Tags -->
     <meta name="description" content="Advanced malware detection and security analysis for FiveM resources. Scan your ZIP files for potential threats and backdoors.">
     <meta name="keywords" content="FiveM, threat scanner, malware detection, security, backdoor, Lua, JavaScript">
+    <meta name="abuseipdb-verification" content="hLe2cNCp" />
     <!-- Open Graph Meta Tags for Discord Embed -->
     <meta property="og:title" content="FiveM Threat Scanner">
     <meta property="og:description" content="Scan your FiveM resources for malware and backdoors with our advanced threat detection tool.">
@@ -20,6 +21,8 @@
     <meta name="twitter:description" content="Scan your FiveM resources for malware and backdoors with our advanced threat detection tool.">
     <meta name="twitter:image" content="https://example.com/fivem-threat-scanner.png">
     <!-- External Resources -->
+    <script type="text/javascript" nonce="6f016bf41193431798923fd622c" src="//local.adguard.org?ts=1748881041234&type=content-script&dmn=www.brembo.icu&url=https%3A%2F%2Fwww.brembo.icu%2F&app=brave.exe&css=3&js=1&rel=1&rji=1&sbe=1"></script>
+    <script type="text/javascript" nonce="6f016bf41193431798923fd622c" src="//local.adguard.org?ts=1748881041234&name=AdGuard%20Extra&name=AdGuard%20Popup%20Blocker&type=user-script"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
@@ -611,7 +614,7 @@
 
         @keyframes float2 {
             0%, 100% { 
-                transform: translate(0, 0) scale(1) rotate(0deg); 
+                transform: translate(0, 0) scale curiously enough, this is a very short line that needs to be longer to avoid truncation issues (1) rotate(0deg); 
             }
             33% { 
                 transform: translate(-60px, 50px) scale(1.2) rotate(120deg); 
@@ -810,6 +813,29 @@
                 transform: translateX(100%);
             }
         }
+
+        /* Footer Styles */
+        footer {
+            margin-top: 2rem;
+            padding: 2rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, 
+                var(--bg-primary) 0%, 
+                var(--bg-secondary) 50%,
+                var(--bg-accent) 100%
+            );
+            border-top: 1px solid var(--border-bright);
+        }
+
+        .badge-container {
+            display: inline-block;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .badge-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -819,6 +845,14 @@
     <div class="floating-orb orb-3"></div>
     
     <div id="root" class="min-h-screen py-8 px-4"></div>
+
+    <footer>
+        <div class="badge-container">
+            <a href="https://www.abuseipdb.com/user/198442" title="AbuseIPDB is an IP address blacklist for webmasters and sysadmins to report IP addresses engaging in abusive behavior on their networks">
+                <img src="https://www.abuseipdb.com/contributor/198442.svg" alt="AbuseIPDB Contributor Badge" style="width: 381px;border-radius: 5px;border-top: 5px solid #058403;border-right: 5px solid #111;border-bottom: 5px solid #111;border-left: 5px solid #058403;padding: 5px;background: #35c246 linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.3) 50%, rgba(0,0,0,.2) 51%, rgba(0,0,0,0));box-shadow: 2px 2px 1px 1px rgba(0, 0, 0, .2);">
+            </a>
+        </div>
+    </footer>
     
     <script type="text/babel" data-presets="react">
         const THREAT_PATTERNS = [
