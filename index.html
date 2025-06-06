@@ -136,6 +136,66 @@
             }
         }
 
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-void);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+            margin-bottom: 30px;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background: var(--bg-card);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            50% { left: 0; }
+            100% { left: 100%; }
+        }
+
         .header {
             position: fixed;
             top: 0;
@@ -575,6 +635,84 @@
             z-index: 1;
         }
 
+        .updates-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .update-card {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .update-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.08), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .update-card:hover::before {
+            left: 100%;
+        }
+
+        .update-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 30px 80px rgba(0, 245, 255, 0.25);
+        }
+
+        .update-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .update-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .update-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-meta .author::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .update-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
         .tos-content {
             background: var(--bg-card);
             border: 2px solid rgba(0, 245, 255, 0.2);
@@ -680,7 +818,9 @@
         .social-link:hover {
             color: var(--neon-cyan);
             border-color: var(--neon-cyan);
-            transform: translateY(-5px) scale(1.1);
+           
+
+ transform: translateY(-5px) scale(1.1);
             box-shadow: var(--shadow-neon);
         }
 
@@ -739,6 +879,18 @@
             .tos-content {
                 padding: 30px;
             }
+
+            .loading-logo {
+                font-size: 36px;
+            }
+
+            .loading-bar {
+                width: 200px;
+            }
+
+            .update-card {
+                padding: 30px;
+            }
         }
 
         .animate-on-scroll {
@@ -781,6 +933,10 @@
     </style>
 </head>
 <body>
+    <div class="loading-screen">
+        <div class="loading-logo">NeonCyber</div>
+        <div class="loading-bar"></div>
+    </div>
     <div class="cyber-background"></div>
     <div class="mesh-overlay"></div>
     <div class="particles"></div>
@@ -792,6 +948,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
+                <li><a href="#updates">Updates</a></li>
                 <li><a href="#banned">Banned Sites</a></li>
                 <li><a href="#tos">TOS</a></li>
             </ul>
@@ -902,6 +1059,25 @@
             </div>
         </section>
 
+        <section id="updates" class="section animate-on-scroll">
+            <h2 class="section-title">Updates</h2>
+            <p class="section-subtitle">
+                Latest enhancements and features added to NeonCyber
+            </p>
+            <div class="updates-grid">
+                <div class="update-card">
+                    <h3 class="update-title">Loading Screen Implementation</h3>
+                    <div class="update-meta">
+                        <span class="author">Posted by Admin</span>
+                        <span>June 06, 2025 10:32 PM EEST</span>
+                    </div>
+                    <p class="update-description">
+                        Introduced a new loading screen with a cyberpunk aesthetic, featuring the NeonCyber logo and a dynamic loading bar to enhance the user experience upon entering the site.
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <section id="banned" class="section animate-on-scroll">
             <h2 class="section-title">Banned Websites</h2>
             <p class="section-subtitle">
@@ -970,6 +1146,15 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
+
+            // Hide loading screen after 2 seconds
+            setTimeout(() => {
+                const loadingScreen = document.querySelector('.loading-screen');
+                loadingScreen.classList.add('hidden');
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
         });
 
         const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
