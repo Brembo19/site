@@ -8,7 +8,6 @@
     <meta name="keywords" content="scanner ip, report ip, ip scanning, ip reporting, cybersecurity, digital security, malicious ip detection, digitallodge.cloud, abuseipdb, NeonCyber">
     <meta name="author" content="NeonCyber">
     <meta name="robots" content="index, follow">
-    <!-- Open Graph Tags for Discord and Social Media Embeds -->
     <meta property="og:title" content="NeonCyber - IP Scanner & Reporting Platform">
     <meta property="og:description" content="Protect the digital world with NeonCyber. Scan and report malicious IPs and domains using digitallodge.cloud for a safer online ecosystem.">
     <meta property="og:type" content="website">
@@ -17,12 +16,10 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:site_name" content="NeonCyber">
-    <!-- Twitter Card Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NeonCyber - IP Scanner & Reporting Platform">
     <meta name="twitter:description" content="Scan and report malicious IP addresses with NeonCyber. Protect the digital world with our advanced cybersecurity tools at digitallodge.cloud.">
     <meta name="twitter:image" content="https://neoncyber.cloud/images/neoncyber-embed.jpg">
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -312,7 +309,7 @@
             justify-content: center;
             position: relative;
             padding: 140px 40px 100px;
-            background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(0, 245, 255, 0.05) 0%, transparent 70%);
+            background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(0, 243, 255, 0.05) 0%, transparent 70%);
         }
 
         .hero-content {
@@ -885,6 +882,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#banned">Banned Sites</a></li>
+                <li><a href="#faq">FAQ</a></li>
                 <li><a href="#tos">TOS</a></li>
             </ul>
         </nav>
@@ -1007,7 +1005,36 @@
                         Blocked due to hosting malicious content and unauthorized activities. Our efforts at digitallodge.cloud help maintain a secure online ecosystem.
                     </p>
                 </div>
-                <!-- Additional banned sites can be added here -->
+            </div>
+        </section>
+
+        <section id="faq" class="section animate-on-scroll">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">
+                Common questions about our processes and services at <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>
+            </p>
+            <div class="cards-grid">
+                <div class="card">
+                    <span class="card-icon">🔍</span>
+                    <h3 class="card-title">How does blocking work?</h3>
+                    <p class="card-description">
+                        We identify malicious IP addresses and domains through advanced scanning and monitoring tools. Once detected, we report them to platforms like <a href="https://www.abuseipdb.com" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">AbuseIPDB</a> and collaborate with hosting providers or authorities to restrict access, ensuring a safer digital environment.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🌐</span>
+                    <h3 class="card-title">What is AbuseIPDB?</h3>
+                    <p class="card-description">
+                        AbuseIPDB is a community-driven platform where webmasters and system administrators report IP addresses involved in malicious activities, such as hacking, phishing, or spamming. We contribute to this database to help maintain a global blacklist, protecting networks worldwide.
+                    </p>
+                </div>
+                <div class="card">
+                    <span class="card-icon">🔄</span>
+                    <h3 class="card-title">How often are data updates?</h3>
+                    <p class="card-description">
+                        Our systems continuously monitor and update data in real-time. Reports are submitted and refreshed daily to ensure our database reflects the latest threats, providing up-to-date protection for users and networks.
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -1024,6 +1051,22 @@
                 <h3>Commitment to Security</h3>
                 <p>
                     By using advanced tools and ethical practices, we ensure that our platform contributes to a safer internet. We prohibit any activities that violate our policies and work tirelessly to uphold the integrity of the digital space.
+                </p>
+                <h3>Privacy Policy</h3>
+                <p>
+                    We are committed to protecting your privacy. Personal data collected, such as IP addresses or user reports, is used solely for the purpose of identifying and mitigating malicious activities. Data is stored securely and shared only with trusted partners like <a href="https://www.abuseipdb.com" target="_blank">AbuseIPDB</a> for the purpose of maintaining a secure online ecosystem. We do not sell or misuse your information.
+                </p>
+                <h3>Data Handling</h3>
+                <p>
+                    All data processed by NeonCyber is handled in compliance with applicable data protection regulations. We employ encryption and secure protocols to safeguard information during transmission and storage. User-submitted reports are anonymized where possible to protect individual identities while ensuring the accuracy of our threat database.
+                </p>
+                <h3>Copyrights</h3>
+                <p>
+                    All content, designs, and code on this website are owned by NeonCyber unless otherwise stated. Unauthorized reproduction or distribution of our materials is prohibited. We respect intellectual property rights and expect our users to do the same when interacting with our services.
+                </p>
+                <h3>Compliance</h3>
+                <p>
+                    NeonCyber operates in accordance with international cybersecurity standards and collaborates with global platforms to ensure compliance with legal and ethical guidelines. We reserve the right to update these terms to reflect changes in regulations or our services. For inquiries, contact us via <a href="https://t.me/Armaganxx" target="_blank">Telegram</a>.
                 </p>
             </div>
         </section>
@@ -1063,7 +1106,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
 
-            // Hide loading screen after 2 seconds
             setTimeout(() => {
                 const loadingScreen = document.querySelector('.loading-screen');
                 loadingScreen.classList.add('hidden');
