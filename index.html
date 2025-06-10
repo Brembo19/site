@@ -612,6 +612,16 @@
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
 
+        .banned-card {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);
+        }
+
+        .banned-card:active {
+            border-color: var(--neon-magenta);
+            box-shadow: 0 20px 60px rgba(255, 0, 170, 0.4);
+        }
+
         .card::before {
             content: '';
             position: absolute;
@@ -1202,12 +1212,18 @@
                 Websites blocked with the help of <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>, ensuring a safer digital environment
             </p>
             <div class="cards-grid">
-                <div class="card">
+                <div class="card banned-card">
                     <span class="card-icon">🚫</span>
                     <h3 class="card-title">anarchybin.[org]</h3>
-                    <h3 class="card-title">stand.[sh]</h3>
                     <p class="card-description">
-                        Blocked due to hosting malicious content and unauthorized activities. Our efforts at digitallodge.cloud help maintain a secure online ecosystem.
+                        Blocked due to hosting malicious content and unauthorized activities. Our efforts at <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a> help maintain a secure online ecosystem.
+                    </p>
+                </div>
+                <div class="card banned-card">
+                    <span class="card-icon">🚫</span>
+                    <h3 class="card-title">stand[sh]</h3>
+                    <p class="card-description">
+                        Blocked due to hosting malicious content and unauthorized activities. Our efforts at <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a> help maintain a secure online ecosystem.
                     </p>
                 </div>
             </div>
@@ -1242,7 +1258,7 @@
                         Verified and confirmed as 100% safe by <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>. No malicious activities detected.
                     </p>
                 </div>
-                <div class="card">
+                <div化名="card">
                     <span class="card-icon">✅</span>
                     <h3 class="card-title">cherax.menu</h3>
                     <p class="card-description">
@@ -1320,7 +1336,7 @@
         <div class="social-links">
             <a href="https://t.me/Armaganxx" class="social-link" title="Telegram">
                 <svg style="width: 24px; height: 24px;" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18-1.15 1.3l-2.72 12.81c-.19-.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+                    <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43-.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
                 </svg>
             </a>
         </div>
@@ -1416,26 +1432,26 @@
                     }
                 });
             });
-        });
 
-        const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+            const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animated');
-                    }
-                });
-            },
-            {
-                threshold: 0.2,
-                rootMargin: '0px 0px -50px 0px'
-            }
-        );
+            const observer = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animated');
+                        }
+                    });
+                },
+                {
+                    threshold: 0.2,
+                    rootMargin: '0px 0px -50px 0px'
+                }
+            );
 
-        animateOnScrollElements.forEach((element) => {
-            observer.observe(element);
+            animateOnScrollElements.forEach((element) => {
+                observer.observe(element);
+            });
         });
     </script>
 </body>
