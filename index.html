@@ -246,9 +246,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
-            position: relative;
-            transition: all 0.3s ease;
-            z-index: 1001;
         }
 
         .logo::after {
@@ -1358,8 +1355,7 @@
             <div class="cards-grid">
                 <div class="card">
                     <span class="card-icon">🔍</span>
-                    anarchystress[.]net
-                    <h3 class="card-title"></h3>
+                    <h3 class="card-title">anarchystress[.]net</h3>
                     <p class="card-description">
                         Currently under investigation for potential malicious activities, including unauthorized modifications and ad-blocking features that may violate online security standards. Awaiting further review by <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>.
                     </p>
@@ -1539,34 +1535,6 @@
             }
         }
 
-        function cacheNews(articles) {
-            try {
-                localStorage.setItem('newsCache', JSON.stringify({
-                    articles,
-                    timestamp: Date.now()
-                }));
-            } catch (e) {
-                console.error('Error caching news:', e);
-            }
-        }
-
-        function getCachedNews() {
-            try {
-                const cached = localStorage.getItem('newsCache');
-                if (!cached) return null;
-                const { articles, timestamp } = JSON.parse(cached);
-                // Cache valid for 1 hour
-                if (Date.now() - timestamp < 60 * 60 * 1000) {
-                    return articles;
-                }
-                localStorage.removeItem('newsCache');
-                return null;
-            } catch (e) {
-                console.error('Error retrieving cached news:', e);
-                return null;
-            }
-        }
-
         async function fetchNews() {
             const newsGrid = document.getElementById('news-grid');
             newsGrid.innerHTML = '<div class="news-loading"><div class="loading-bar"></div><p>Loading news...</p></div>';
@@ -1593,19 +1561,37 @@
                             let description = item.querySelector('description')?.textContent || 'No description';
                             const link = item.querySelector('link')?.textContent || '#';
                             const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString();
+                            const enclosure = item.querySelector('enclosure');
+                            const mediaContent = item.querySelector('media\\:content, content');
+                            const mediaThumbnail = item.querySelector('media\\:thumbnail, thumbnail');
+
+                            // Extract image from enclosure, media:content, or description
+                            let imgSrc = 'https://placehold.co/300x150?text=News+Image';
+                            if (enclosure && enclosure.getAttribute('url')?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                                imgSrc = enclosure.getAttribute('url');
+                            } else if (mediaContent && mediaContent.getAttribute('url')?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                                imgSrc = mediaContent.getAttribute('url');
+                            } else if (mediaThumbnail && mediaThumbnail.getAttribute('url')?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+                                imgSrc = mediaThumbnail.getAttribute('url');
+                            } else {
+                                // Fallback to parsing description for an image
+                                const descriptionDiv = document.createElement('div');
+                                descriptionDiv.innerHTML = description;
+                                const img = descriptionDiv.querySelector('img');
+                                if (img && img.src?.startsWith('http')) {
+                                    imgSrc = img.src;
+                                }
+                            }
 
                             // Clean up description by removing HTML tags
                             const descriptionDiv = document.createElement('div');
                             descriptionDiv.innerHTML = description;
-                            const img = descriptionDiv.querySelector('img');
-                            let imgSrc = img ? img.src : 'https://placehold.co/300x150?text=News+Image';
-                            
+                            description = descriptionDiv.textContent.substring(0, 150) + '...';
+
                             // Validate image URL
                             if (!imgSrc.startsWith('http')) {
                                 imgSrc = 'https://placehold.co/300x150?text=News+Image';
                             }
-
-                            description = descriptionDiv.textContent.substring(0, 150) + '...';
 
                             articles.push({
                                 title,
@@ -1627,25 +1613,13 @@
             articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
             articles = articles.slice(0, 6);
 
-            // If no articles fetched, try cached news
-            if (articles.length === 0) {
-                const cachedArticles = getCachedNews();
-                if (cachedArticles) {
-                    articles = cachedArticles;
-                    showNotification('Showing cached news due to fetch failure.', 'info');
-                } else {
-                    newsGrid.innerHTML = '<p class="news-error">Unable to load news. Please check your connection and try again later.</p>';
-                    showNotification('Failed to load news from all sources.', 'error');
-                    return;
-                }
-            }
-
-            // Cache successful articles
-            if (articles.length > 0) {
-                cacheNews(articles);
-            }
-
             // Render articles
+            if (articles.length === 0) {
+                newsGrid.innerHTML = '<p class="news-error">Unable to load news. Please check your connection and try again later.</p>';
+                showNotification('Failed to load news from all sources.', 'error');
+                return;
+            }
+
             newsGrid.innerHTML = '';
             articles.forEach(article => {
                 const newsCard = document.createElement('div');
@@ -1660,75 +1634,37 @@
                 newsGrid.appendChild(newsCard);
             });
 
-            if (errors.length > 0 && articles.length > 0) {
-                showNotification(`Some sources (${errors.join(', ')}) failed to load, but news is available.`, 'info');
-            } else if (errors.length === feeds.length && articles.length > 0) {
-                showNotification('All sources failed, showing cached news.', 'info');
+            if (errors.length > 0) {
+                showNotification(`Some sources (${errors.join(', ')}) failed to load.`, 'info');
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
-
-            setTimeout(() => {
-                const loadingScreen = document.querySelector('.loading-screen');
-                loadingScreen.classList.add('hidden');
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 2000);
-
-            showNotification('Website loaded successfully!', 'success');
             fetchNews();
 
             const hamburger = document.querySelector('.hamburger');
             const navLinks = document.querySelector('.nav-links');
-
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navLinks.classList.toggle('active');
             });
 
-            hamburger.addEventListener('touchstart', () => {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
-
-            document.querySelectorAll('.nav-links a').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                        navLinks.classList.remove('active');
-                        hamburger.classList.remove('active');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
                     }
                 });
-            });
+            }, { threshold: 0.1 });
 
-            const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
-
-            const observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('animated');
-                        }
-                    });
-                },
-                {
-                    threshold: 0.2,
-                    rootMargin: '0px 0px -50px 0px'
-                }
-            );
-
-            animateOnScrollElements.forEach((element) => {
+            document.querySelectorAll('.animate-on-scroll').forEach(element => {
                 observer.observe(element);
             });
+
+            setTimeout(() => {
+                document.querySelector('.loading-screen').classList.add('hidden');
+            }, 2000);
         });
     </script>
 </body>
