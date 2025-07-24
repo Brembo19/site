@@ -604,6 +604,93 @@
             overflow: hidden;
         }
 
+        .ad-card {
+            background: var(--bg-card);
+            border: 2px solid var(--neon-magenta);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);
+        }
+
+        .ad-card:active {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--neon-magenta);
+            box-shadow: 0 20px 60px rgba(255, 0, 170, 0.4);
+        }
+
+        .ad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 170, 0.08), transparent);
+            transition: left 0.6s;
+        }
+
+        .ad-card:active::before {
+            left: 100%;
+        }
+
+        .ad-title {
+            font-size: clamp(22px, 5vw, 26px);
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ad-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
+        }
+
+        .ad-ratings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .ad-rating {
+            font-size: clamp(14px, 4vw, 16px);
+            color: var(--text-secondary);
+        }
+
+        .ad-rating span {
+            color: var(--neon-green);
+            font-weight: 700;
+        }
+
+        .ad-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: clamp(14px, 4vw, 16px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ad-link:active {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 0, 170, 0.3);
+        }
+
         #verify-site .card {
             border-color: var(--neon-green);
             box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
@@ -1096,7 +1183,7 @@
                 padding: 20px;
             }
 
-            .card, .news-card {
+            .card, .news-card, .ad-card {
                 padding: 30px;
             }
 
@@ -1137,8 +1224,12 @@
                 font-size: clamp(36px, 9vw, 40px);
             }
 
-            .card-title, .news-title {
+            .card-title, .news-title, .ad-title {
                 font-size: clamp(20px, 4.5vw, 22px);
+            }
+
+            .ad-image {
+                max-width: 250px;
             }
         }
 
@@ -1202,9 +1293,9 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
+                <li><a href="#advertisement">Advertisement</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#banned">Banned Sites</a></li>
-                <li><a href="#pending-blocks">Pending Blocks</a></li>
                 <li><a href="#verify-site">Site Verification</a></li>
                 <li><a href="#news">News</a></li>
                 <li><a href="#faq">FAQ</a></li>
@@ -1272,6 +1363,33 @@
                     <p class="card-description">
                         Protecting the digital ecosystem by identifying and reporting malicious activities through <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>, ensuring a safer online environment.
                     </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="advertisement" class="section animate-on-scroll">
+            <h2 class="section-title">Advertisement</h2>
+            <p class="section-subtitle">
+                Discover trusted networks and services we recommend
+            </p>
+            <div class="cards-grid">
+                <div class="ad-card">
+                    <h3 class="ad-title">Return Network</h3>
+                    <img src="https://i.ibb.co/SXctj1tY/standard-1.gif" alt="Return Network Ad" class="ad-image">
+                    <div class="ad-ratings">
+                        <p class="ad-rating">Rate: <span>5/5</span></p>
+                        <p class="ad-rating">L4: <span>5/5</span></p>
+                        <p class="ad-rating">L7: <span>4/5</span></p>
+                    </div>
+                    <a href="https://t.me/returnc22" target="_blank" class="ad-link">Join on Telegram</a>
+                </div>
+                <div class="ad-card">
+                    <h3 class="ad-title">Trust Cheat Reseller</h3>
+                    <div class="ad-ratings">
+                        <p class="ad-rating">Rate: <span>5/5</span></p>
+                        <p class="ad-rating">Price: <span>5/5</span></p>
+                    </div>
+                    <a href="https://discord.gg/JH7z7Ec36a" target="_blank" class="ad-link">Join on Discord</a>
                 </div>
             </div>
         </section>
@@ -1344,20 +1462,11 @@
                         Blocked due to hosting malicious content and unauthorized activities. Our efforts at <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a> help maintain a secure online ecosystem.
                     </p>
                 </div>
-            </div>
-        </section>
-
-        <section id="pending-blocks" class="section animate-on-scroll">
-            <h2 class="section-title">Pending Blocks</h2>
-            <p class="section-subtitle">
-                Websites under review for potential blocking due to suspected malicious activities, monitored by <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>
-            </p>
-            <div class="cards-grid">
-                <div class="card">
-                    <span class="card-icon">🔍</span>
+                <div class="card banned-card">
+                    <span class="card-icon">🚫</span>
                     <h3 class="card-title">anarchystress[.]net</h3>
                     <p class="card-description">
-                        Currently under investigation for potential malicious activities, including unauthorized modifications and ad-blocking features that may violate online security standards. Awaiting further review by <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a>.
+                        Blocked due to hosting malicious content and unauthorized activities. Our efforts at <a href="https://digitallodge.cloud" target="_blank" style="color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease;">digitallodge.cloud</a> help maintain a secure online ecosystem.
                     </p>
                 </div>
             </div>
