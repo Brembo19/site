@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <base href="/repository/"> <!-- Adjust 'repository' to your GitHub repository name -->
     <title>NeonCyber - Digital Architect</title>
     <meta name="description" content="NeonCyber: Scan and report malicious IP addresses and domains to ensure a safe digital ecosystem with digitallodge.cloud.">
     <meta name="keywords" content="scanner ip, report ip, ip scanning, ip reporting, cybersecurity, digital security, malicious ip detection, digitallodge.cloud, abuseipdb, NeonCyber">
@@ -35,7 +36,7 @@
             --bg-dark: #0a0a0f;
             --bg-darker: #050508;
             --bg-void: #000005;
-            --bg-card: rgba(15, 15,25, 0.9);
+            --bg-card: rgba(15, 15, 25, 0.9);
             --bg-glass: rgba(20, 20, 35, 0.7);
             --text-primary: #ffffff;
             --text-secondary: #b4b4b8;
@@ -601,7 +602,7 @@
             backdrop-filter: blur(30px);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .ad-card {
@@ -612,7 +613,7 @@
             backdrop-filter: blur(30px);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);
         }
 
@@ -684,6 +685,9 @@
             font-weight: 600;
             font-size: clamp(14px, 4vw, 16px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            position: relative;
+            visibility: visible;
         }
 
         .ad-link:active {
@@ -1375,7 +1379,7 @@
             <div class="cards-grid">
                 <div class="ad-card">
                     <h3 class="ad-title">Return Network</h3>
-                    <img src="https://i.ibb.co/SXctj1tY/standard-1.gif" alt="Return Network Ad" class="ad-image">
+                    <img src="https://i.ibb.co/SXctj1tY/standard-1.gif" alt="Return Network Ad" class="ad-image" onerror="this.src='https://placehold.co/300x150?text=Return+Network';">
                     <div class="ad-ratings">
                         <p class="ad-rating">Rate: <span>5/5</span></p>
                         <p class="ad-rating">L4: <span>5/5</span></p>
@@ -1385,6 +1389,7 @@
                 </div>
                 <div class="ad-card">
                     <h3 class="ad-title">Trust Cheat Reseller</h3>
+                    <img src="https://placehold.co/300x150?text=Trust+Cheat+Reseller" alt="Trust Cheat Reseller Ad" class="ad-image">
                     <div class="ad-ratings">
                         <p class="ad-rating">Rate: <span>5/5</span></p>
                         <p class="ad-rating">Price: <span>5/5</span></p>
